@@ -1,0 +1,42 @@
+<div class="card mb-0" [ngStyle]="{'top.px': top, 'left.px': left}">
+    <div class="d-flex justify-content-center p-2">
+        {{details.selectedDayData.date}}
+    </div>
+    <hr class="m-0">
+    <div class="py-2 px-2">
+        <div *ngIf="logStatuses.length<=2">
+            <div style="font-weight: 500;font-size: 13px;">
+                <div class="d-flex justify-content-between">
+                    <div class="text-secondary">Check-In:</div>
+                    <div class="text-success">{{logStatuses[0].dateTime|date:'HH:mm a'}}</div>
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <div class="text-secondary">Check-Out:</div>
+                    <div class="text-danger">{{logStatuses.length==1?'--':logStatuses[1].dateTime|date:'HH:mm a'}}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="logStatuses.length>2" style="font-weight: 500;font-size: 13px;">
+            <div class="d-flex justify-content-between text-secondary">
+                <div> Check-In</div>
+                <div>Check-Out</div>
+            </div>
+            <div class="d-flex justify-content-between mt-1">
+                <div>
+                    <div *ngFor="let data of checkIn">
+                        <div class="text-success">{{data.dateTime|date:'HH:mm a'}}</div>
+                    </div>
+                </div>
+                <div>
+                    <div *ngFor="let data of checkOut;let idx=index">
+                        <div class="text-danger">
+                            <span>{{(checkIn.length!=checkOut.length&&checkOut[checkOut.length]==idx)?'--':data.dateTime|date:'HH:mm
+                                a'}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,360 @@
+<div class="title p-3">
+    <span>{{status}} Student</span>
+</div>
+<div>
+    <div class="card">
+        <form #studentForm="ngForm" (ngSubmit)="onSubmit()">
+            <div class="p-3 heading mt-2 mx-2">
+                <span style="font-size: 15px;font-weight: 500;color: rgb(66, 66, 66);">Personal Details</span>
+            </div>
+            <div class="p-3">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="row">
+                            <div class="form-field">
+                                <label class="label" style="margin-left: 12px;">Name</label>
+                                <input type="text" class="form-control" name="name" [(ngModel)]="data.name"
+                                    #name="ngModel" required
+                                    [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                                <p *ngIf="name.touched && name.errors && name.errors['required']"
+                                    class="validation-error">
+                                    Name is required
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="form-field">
+                                <label class="label" style="margin-left: 13px;">Email</label>
+                                <input type="text" class="form-control" name="email" [(ngModel)]="data.email"
+                                    #email="ngModel">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                        <input type="file" id="profile-input" hidden #uploadLogo name="logo" accept="image/*"
+                            (change)="onProfileChange($event)">
+
+                        <!-- add-img -->
+                        <div (click)="openImagePicker('profile-input')" style="cursor: pointer;">
+                            <div *ngIf="!previewProfilePicUrl" class="logo-card">
+                                <i class="fa-regular fa-image"></i>
+                            </div>
+                        </div>
+
+                        <!-- update-img -->
+                        <div *ngIf="previewProfilePicUrl" class="logo-card-img" style="cursor: pointer;">
+                            <i class="fa-solid fa-circle-xmark" (click)="removeProfilePicUrl()"></i>
+                            <img class="org-logo" [src]="previewProfilePicUrl"
+                                (click)="openImagePicker('profile-input')" />
+                            <div class="edit-profilepic-overlay">
+                                <div class="empty-white-bg">
+                                    <i class="fa-solid fa-pen" (click)="openImagePicker('profile-input')"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div></div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Phone</label>
+                            <input type="number" class="form-control" name="phone" [(ngModel)]="data.phone"
+                                #phone="ngModel" required
+                                [ngClass]="{'is-invalid':phone.touched && phone.errors && phone.errors['required']}">
+                            <p *ngIf="phone.touched && phone.errors && phone.errors['required']"
+                                class="validation-error">
+                                Phone is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">D.O.B</label>
+                            <input type="date" class="form-control" name="dob" [(ngModel)]="data.dob" #dob="ngModel"
+                                required [ngClass]="{'is-invalid':dob.touched && dob.errors && dob.errors['required']}">
+                            <p *ngIf="dob.touched && dob.errors && dob.errors['required']" class="validation-error">
+                                D.O.B is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Date of Addmission</label>
+                            <input type="date" class="form-control" name="doa" [(ngModel)]="data.doa" #doa="ngModel"
+                                required [ngClass]="{'is-invalid':doa.touched && doa.errors && doa.errors['required']}">
+                            <p *ngIf="doa.touched && doa.errors && doa.errors['required']" class="validation-error">
+                                Date of Addmission is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Aadhar</label>
+                            <input type="text" class="form-control" name="aadhar" [(ngModel)]="data.aadhar"
+                                #aadhar="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Gender</label>
+                            <select name="gender" class="form-select" [(ngModel)]="data.gender" #gender="ngModel">
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Session</label>
+                            <select name="batch" class="form-select" [(ngModel)]="data.batch" #batch="ngModel">
+                                <option *ngFor="let range of dateRanges">{{range}}</option>
+                            </select>
+                            <!-- <p *ngIf="batch.touched && batch.errors && batch.errors['required']"
+                                class="validation-error">
+                                Btach is required
+                            </p> -->
+                        </div>
+                    </div>
+                    <!-- <div class=" col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Registration Number</label>
+                            <input type="number" class="form-control" name="resgistration"
+                                [(ngModel)]="data.registrationNumber" #resgistration="ngModel">
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Class</label>
+                            <select name="class" class="form-select" [(ngModel)]="data.associationId" #class="ngModel"
+                                required
+                                [ngClass]="{'is-invalid':class.touched && class.errors && class.errors['required']}">
+                                <option *ngFor="let association of associations" [value]="association.id">
+                                    {{association.name}}
+                                </option>
+                            </select>
+                            <p *ngIf="class.touched && class.errors && class.errors['required']"
+                                class="validation-error">
+                                Class is required
+                            </p>
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Department</label>
+                            <select name="department" class="form-select" [(ngModel)]="data.departmentId"
+                                #department="ngModel" required
+                                [ngClass]="{'is-invalid':department.touched && department.errors && department.errors['required']}">
+                                <option *ngFor="let department of departments" [value]="department.id">
+                                    {{department.name}}</option>
+                            </select>
+                            <p *ngIf="department.touched && department.errors && department.errors['required']"
+                                class="validation-error">
+                                Department is required
+                            </p>
+                        </div>
+                    </div> -->
+                    <!-- <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Course</label>
+                            <select name="course" class="form-select" [(ngModel)]="data.courseCode" #course="ngModel"
+                                required
+                                [ngClass]="{'is-invalid':course.touched && course.errors && course.errors['required']}">
+                                <option *ngFor="let course of courses" [value]="course.id">{{course.name}}</option>
+                            </select>
+                            <p *ngIf="course.touched && course.errors && course.errors['required']"
+                                class="validation-error">
+                                Course is required
+                            </p>
+                        </div>
+                    </div> -->
+                    <div class=" col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Semester</label>
+                            <input type="number" class="form-control" name="semester" [(ngModel)]="data.semester"
+                                #semester="ngModel">
+                        </div>
+                    </div>
+                    <div class=" col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Roll No.</label>
+                            <input type="number" class="form-control" name="rollNo" [(ngModel)]="data.rollNo"
+                                #rollNo="ngModel">
+                        </div>
+                    </div>
+                    <div class=" col-4" *ngIf="!data.id">
+                        <div class="form-field mt-4">
+                            <label class="label">Password</label>
+                            <input type="password" class="form-control" name="password" [(ngModel)]="data.password"
+                                #password="ngModel">
+                        </div>
+                    </div>
+                    <!-- <div class=" col-4 d-flex align-items-center">
+                        <div class="form-field mt-4">
+                            <div>
+                                <label class="pointer">
+                                    <input type="checkbox" class="me-2 mt-4" [(ngModel)]="data.lateralEntry"
+                                        #checkbox="ngModel" name="checkbox">Lateral Entry
+                                </label>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <div class="p-3 heading mx-2">
+                <span style="font-size: 15px;font-weight: 500;color: rgb(66, 66, 66);">Address Details</span>
+            </div>
+            <div class="p-3">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-field mt-4">
+                            <label class="label">Current Address</label>
+                            <input type="text" class="form-control" name="currentAddress"
+                                [(ngModel)]="data.currentAddress" #currentAddress="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-field mt-4">
+                            <label class="label">Permanent Address</label>
+                            <input type="text" class="form-control" name="permanentAddress"
+                                [(ngModel)]="data.permanentAddress" #permanentAddress="ngModel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 heading mx-2">
+                <span style="font-size: 15px;font-weight: 500;color: rgb(66, 66, 66);">Father's Info</span>
+            </div>
+            <div class="p-3">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Father's Name</label>
+                            <input type="text" class="form-control" name="fatherName" [(ngModel)]="data.fatherName"
+                                #fatherName="ngModel" required
+                                [ngClass]="{'is-invalid':fatherName.touched && fatherName.errors && fatherName.errors['required']}">
+                            <p *ngIf="fatherName.touched && fatherName.errors && fatherName.errors['required']"
+                                class="validation-error">
+                                Father Name is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Email</label>
+                            <input type="text" class="form-control" name="fatherEmail" [(ngModel)]="data.fatherEmail"
+                                #fatherEmail="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Phone</label>
+                            <input type="text" class="form-control" name="fatherPhone" [(ngModel)]="data.fatherPhone"
+                                #fatherPhone="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Occupation</label>
+                            <input type="text" class="form-control" name="fatherOccupation"
+                                [(ngModel)]="data.fatherOccupation" #fatherOccupation="ngModel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 heading mx-2">
+                <span style="font-size: 15px;font-weight: 500;color: rgb(66, 66, 66);">Mother's Info</span>
+            </div>
+            <div class="p-3">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Mother's Name</label>
+                            <input type="text" class="form-control" name="motherName" [(ngModel)]="data.motherName"
+                                #motherName="ngModel" required
+                                [ngClass]="{'is-invalid':motherName.touched && motherName.errors && motherName.errors['required']}">
+                            <p *ngIf="motherName.touched && motherName.errors && motherName.errors['required']"
+                                class="validation-error">
+                                Mother Name is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Email</label>
+                            <input type="text" class="form-control" name="motherEmail" [(ngModel)]="data.motherEmail"
+                                #motherEmail="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Phone</label>
+                            <input type="text" class="form-control" name="motherPhone" [(ngModel)]="data.motherPhone"
+                                #motherPhone="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Occupation</label>
+                            <input type="text" class="form-control" name="motherOccupation"
+                                [(ngModel)]="data.motherOccupation" #motherOccupation="ngModel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 heading mx-2">
+                <span style="font-size: 15px;font-weight: 500;color: rgb(66, 66, 66);">Guardian Info (optional)</span>
+            </div>
+            <div class="p-3">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Name</label>
+                            <input type="text" class="form-control" name="guardianName" [(ngModel)]="data.guardianName"
+                                #guardianName="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Relation</label>
+                            <input type="text" class="form-control" name="guardianRelation"
+                                [(ngModel)]="data.guardianRelation" #guardianRelation="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Email</label>
+                            <input type="text" class="form-control" name="guardianEmail"
+                                [(ngModel)]="data.guardianEmail" #guardianEmail="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Phone</label>
+                            <input type="text" class="form-control" name="guardianPhone"
+                                [(ngModel)]="data.guardianPhone" #guardianPhone="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Occupation</label>
+                            <input type="text" class="form-control" name="guardianOccupation"
+                                [(ngModel)]="data.guardianOccupation" #guardianOccupation="ngModel">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Address</label>
+                            <input type="text" class="form-control" name="guardianAddress"
+                                [(ngModel)]="data.guardianAddress" #guardianAddress="ngModel">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr class="m-0">
+            <div class="d-flex justify-content-end p-3">
+                <button type="button" class="btn btn-secondary me-2" (click)="close()">Cancel</button>
+                <button type="submit" class="btn btn-primary">{{data.id?'Update':'Save'}}</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- </div> -->

@@ -1,0 +1,85 @@
+<div class="card mb-0" style="max-height: 90vh; overflow: auto; ">
+    <div class="d-flex justify-content-between p-3">
+        <span class="title">{{status}} Branch</span>
+        <mat-icon class="pointer" (click)="close()">close</mat-icon>
+    </div>
+    <hr class="m-0">
+    <form #branchForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="px-3">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Name*</label>
+                        <input type="text" class="form-control" name="name" [(ngModel)]="data.name" #name="ngModel"
+                            required [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                        <p *ngIf="name.touched && name.errors && name.errors['required']" class="validation-error ">
+                            Name is required
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Code</label>
+                        <input type="text" class="form-control" name="code" [(ngModel)]="data.code" #code="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Phone Number</label>
+                        <input type="number" class="form-control" name="phone" [(ngModel)]="data.phone"
+                            #phone="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Address</label>
+                        <input type="text" class="form-control" name="address" [(ngModel)]="data.address"
+                            #address="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Pincode</label>
+                        <input type="text" class="form-control" name="pincode" [(ngModel)]="data.pincode"
+                            #pincode="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">State</label>
+                        <select class="form-select" name="state" [(ngModel)]="data.stateId" #state="ngModel">
+                            <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Website</label>
+                        <input type="text" class="form-control" name="website" [(ngModel)]="data.website"
+                            #website="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Description</label>
+                        <input type="text" class="form-control" name="description" [(ngModel)]="data.description"
+                            #website="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Session</label>
+                        <select class="form-select" name="session" [(ngModel)]="data.session" #session="ngModel">
+                            <option *ngFor="let session of dateRanges">{{session}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="mb-0">
+        <div class="d-flex justify-content-end p-3">
+            <button type="button" class="btn btn-secondary me-2" (click)="close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">{{details.id?'Update':'Save'}}</button>
+        </div>
+    </form>
+</div>

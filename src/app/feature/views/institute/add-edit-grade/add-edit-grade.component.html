@@ -1,0 +1,64 @@
+<div class="card mb-0">
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <span class="title">{{status}} Grade</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        <form #gradeForm="ngForm">
+            <div class="form-field">
+                <label class="label">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="data.name" name="name" #name="ngModel" required
+                    [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                <p *ngIf="name.touched && name.errors && name.errors['required']" class="validation-error">
+                    Name is required
+                </p>
+            </div>
+            <div class="d-flex">
+                <div class="form-field mt-4 w-100 me-2">
+                    <label class="label">Min. Marks</label>
+                    <input type="number" class="form-control" [(ngModel)]="data.minMarks" name="minMarks"
+                        #minMarks="ngModel" (blur)="setMinMarks()" required
+                        [ngClass]="{'is-invalid':minMarks.touched && minMarks.errors && minMarks.errors['required']}">
+                    <p *ngIf="minMarks.touched && minMarks.errors && minMarks.errors['required']"
+                        class="validation-error">
+                        Min. Marks is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 w-100 ms-2">
+                    <label class="label">Max. Marks</label>
+                    <input type="number" class="form-control" [(ngModel)]="data.maxMarks" name="maxMarks"
+                        #maxMarks="ngModel" (blur)="setMinMarks()" required
+                        [ngClass]="{'is-invalid':maxMarks.touched && maxMarks.errors && maxMarks.errors['required']}">
+                    <p *ngIf="maxMarks.touched && maxMarks.errors && maxMarks.errors['required']"
+                        class="validation-error">
+                        Max. Marks is required
+                    </p>
+                </div>
+            </div>
+            <!-- <div class="form-field mt-4">
+                <label class="label">Status</label>
+                <select type="number" class="form-select" [(ngModel)]="data.examStatus" name="examStatus"
+                    #examStatus="ngModel" required
+                    [ngClass]="{'is-invalid':examStatus.touched && examStatus.errors && examStatus.errors['required']}">
+                    <option>ACTIVE</option>
+                    <option>INACTIVE</option>
+                </select>
+                <p *ngIf="examStatus.touched && examStatus.errors && examStatus.errors['required']"
+                    class="validation-error">
+                    Status is required
+                </p>
+            </div> -->
+            <div class="form-field mt-4">
+                <label class="label">Description</label>
+                <textarea class="form-control h-100" name="description" [(ngModel)]="data.description"
+                    #description="ngModel" rows="2"></textarea>
+            </div>
+        </form>
+    </div>
+    <hr class="m-0">
+    <div class="d-flex justify-content-end p-3">
+        <button class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button class="btn btn-primary ms-2" (click)="onSubmit()">{{status=='Add'?'Save':'Update'}}</button>
+    </div>
+</div>

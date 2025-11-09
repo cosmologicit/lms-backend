@@ -1,0 +1,429 @@
+<div class="p-3 d-flex justify-content-between">
+    <span class="title">Teacher Details</span>
+    <div style="font-size: 16px;">
+        <i class="fa-regular fa-pen-to-square pointer" [routerLink]="'/app/user/teacher/edit/'+teacherId"
+            title="edit"></i>
+        <i class="fa-solid fa-lock pointer ms-3" title="Change Password" (click)="changePassword()"></i>
+    </div>
+</div>
+
+<div class="row px-2">
+    <div class="col-md-3 col-sm-12">
+        <div class="basic-info-card">
+            <div class="d-flex">
+                <div class="p-3">
+                    <img [src]="previewProfilePicUrl?previewProfilePicUrl:'../../../../../assets/images/Default icon.png'"
+                        class="profile-pic" />
+                </div>
+                <div class="basic-info p-3 ps-0">
+                    <span class="name">{{teacher.name | titlecase}}</span>
+                    <span>{{teacher.teacherId}}</span>
+                    <span>Joined : {{teacher.doj | date:'dd MMM yyyy'}}</span>
+                </div>
+            </div>
+            <div class="info p-3">
+                <div class="info-heading">Basic Information</div>
+                <div class="d-flex mt-2">
+                    <span class="basic-heading">Class & Section</span>
+                    <span class="ps-4">{{teacher.associationName}}</span>
+                </div>
+
+                <div class="d-flex mt-2">
+                    <span class="basic-heading">Gender</span>
+                    <span class="ps-4">{{teacher.gender | titlecase}}</span>
+                </div>
+
+                <div class="d-flex mt-2">
+                    <span class="basic-heading">Father's Name</span>
+                    <span class="ps-4">{{teacher.fatherName | titlecase}}</span>
+                </div>
+
+                <div class="d-flex mt-2">
+                    <span class="basic-heading">Mother's Name</span>
+                    <span class="ps-4">{{teacher.motherName | titlecase}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="basic-info-card mt-3">
+            <div class="info p-3 border-0">
+                <div class="info-heading">Primary Contact Info</div>
+                <div class="d-flex mt-3 align-items-center">
+                    <span class="contact-icon me-2"><i class="fa fa-phone"></i></span>
+                    <span class="contact-info">
+                        <span class="contact-heading">Phone Number</span>
+                        <span>{{teacher.phone}}</span>
+                    </span>
+                </div>
+
+                <div class="d-flex mt-3 align-items-center">
+                    <span class="contact-icon me-2"><i class="fa fa-mail-bulk"></i></span>
+                    <span class="contact-info">
+                        <span class="contact-heading">Email Address</span>
+                        <span>{{teacher.email}}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="basic-info-card mt-3">
+            <div class="info p-3 border-0">
+                <div class="info-heading">Goverment ID Number</div>
+                <div class="d-flex mt-3 align-items-center">
+                    <span class="contact-icon me-2"><i class="fa fa-id-badge"></i></span>
+                    <span class="contact-info">
+                        <span>{{teacher.govtId}}</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-9 col-sm-12">
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <i class="fa fa-user-tie"></i>&nbsp;&nbsp;Teacher Details
+                </ng-template>
+                <div class="basic-info-card mt-3">
+                    <div class="info p-3 py-3 border-0">
+                        <div class="info-heading">Profile Details</div>
+                    </div>
+                    <div class="info p-3">
+                        <div class="row">
+                            <div class="col d-flex align-items-center">
+                                <span class="contact-info">
+                                    <span class="contact-heading">Father's Name</span>
+                                    <span>{{teacher.fatherName | titlecase}}</span>
+                                </span>
+                            </div>
+
+                            <div class="col d-flex  align-items-center">
+                                <span class="contact-info">
+                                    <span class="contact-heading">Mother's Name</span>
+                                    <span>{{teacher.motherName | titlecase}}</span>
+                                </span>
+                            </div>
+
+                            <div class="col d-flex align-items-center">
+                                <span class="contact-info">
+                                    <span class="contact-heading">Date of Birth</span>
+                                    <span>{{teacher.dob | date:'dd MMM yyyy'}}</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col d-flex align-items-center">
+                                <span class="contact-info">
+                                    <span class="contact-heading">Martial Status</span>
+                                    <span>{{teacher.maritalStatus | titlecase}}</span>
+                                </span>
+                            </div>
+
+                            <div class="col d-flex align-items-center">
+                                <span class="contact-info">
+                                    <span class="contact-heading">Qualification</span>
+                                    <span>{{teacher.qualification}}</span>
+                                </span>
+                            </div>
+
+                            <div class="col d-flex align-items-center">
+                                <span class="contact-info">
+                                    <span class="contact-heading">Work Experience</span>
+                                    <span>{{teacher.workExperience | titlecase}}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row g-0">
+                    <div class="col-6 pe-2">
+                        <div class="basic-info-card mt-3">
+                            <div class="info p-3 py-2 border-0">
+                                <div class="info-heading">Address</div>
+                            </div>
+                            <div class="info p-3">
+                                <div class="d-flex align-items-center">
+                                    <span class="contact-icon me-2"><i class="fa fa-map-marker-alt"></i></span>
+                                    <span class="contact-info">
+                                        <span class="contact-heading">Current Address</span>
+                                        <span>{{teacher.address}}</span>
+                                    </span>
+                                </div>
+
+                                <div class="d-flex mt-3 align-items-center">
+                                    <span class="contact-icon me-2"><i class="fa fa-map"></i></span>
+                                    <span class="contact-info">
+                                        <span class="contact-heading">Permanent Address</span>
+                                        <span>{{teacher.permanentAddress}}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6 ps-2">
+                        <div class="basic-info-card mt-3">
+                            <div class="info p-3 py-2 border-0">
+                                <div class="info-heading">Previous School Info</div>
+                            </div>
+                            <div class="info p-3">
+                                <div class="d-flex align-items-center">
+                                    <span class="contact-icon me-2"><i class="fa fa-school"></i></span>
+                                    <span class="contact-info">
+                                        <span class="contact-heading">School Name</span>
+                                        <span>{{teacher.previousSchool}}</span>
+                                    </span>
+                                </div>
+
+                                <div class="d-flex mt-3 align-items-center">
+                                    <span class="contact-icon me-2"><i class="fa fa-map-pin"></i></span>
+                                    <span class="contact-info">
+                                        <span class="contact-heading">School Address</span>
+                                        <span>{{teacher.previousSchoolAddress}}</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="basic-info-card mt-3">
+                    <div class="info p-3 py-2 border-0">
+                        <div class="info-heading">Other Info</div>
+                    </div>
+                    <div class="info p-3">{{teacher.description}}</div>
+                </div>
+            </mat-tab>
+
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <i class="fa fa-table"></i>&nbsp;&nbsp;Time Table
+                </ng-template>
+
+                <div class="mt-3 time-table-div">
+                    <div class="d-flex justify-content-between p-3"
+                        style="background-color: white;max-width: 100%;overflow: auto; border-radius: 7px;">
+                        <div *ngIf="isSundayVisible" class="me-3 col">
+                            <div class="heading" style="background-color: #FDE9ED;">
+                                Sunday
+                            </div>
+                            <div>
+                                <div class="schedule p-3" *ngFor="let day of sunday;let idx = index"
+                                    [style.backgroundColor]="day.color">
+                                    <div class="d-flex align-items-center">
+                                        <div style="color: gray;">
+                                            <i class="fa-regular fa-clock"></i>
+                                            <span class="ms-2">{{day.intervalFrom}}</span>
+                                            <span class="mx-1">-</span>
+                                            <span>{{day.intervalTo}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-1 d-flex justify-content-center">
+                                        <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                            [title]="day.subjectName">
+                                            {{day.subjectName}}</div>
+                                    </div>
+                                    <div class="mt-3 p-1 d-flex justify-content-center"
+                                        style="background-color: white;border-radius: 5px;">
+                                        <div *ngIf="!day.isBreak" class="ellipse"
+                                            [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                            {{role=='STUDENT'?day.teacherName:day.associationName}}
+                                        </div>
+                                        <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isMondayVisible" class="me-3 col">
+                            <div class="heading" style="background-color: #FDE9ED;">
+                                Monday
+                            </div>
+                            <div>
+                                <div class="schedule p-3" *ngFor="let day of monday;let idx = index"
+                                    [style.backgroundColor]="day.color">
+                                    <div class="d-flex align-items-center">
+                                        <div style="color: gray;">
+                                            <i class="fa-regular fa-clock"></i>
+                                            <span class="ms-2">{{day.intervalFrom}}</span>
+                                            <span class="mx-1">-</span>
+                                            <span>{{day.intervalTo}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="mt-1 d-flex justify-content-center">
+                                        <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                            [title]="day.subjectName">
+                                            {{day.subjectName}}</div>
+                                    </div>
+                                    <div class="mt-3 p-1 d-flex justify-content-center"
+                                        style="background-color: white;border-radius: 5px;">
+                                        <div *ngIf="!day.isBreak" class="ellipse"
+                                            [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                            {{role=='STUDENT'?day.teacherName:day.associationName}}
+                                        </div>
+                                        <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isTuesdayVisible" class="me-3 col">
+                            <div class="heading" style="background-color: #E6F9FF;">
+                                Tuesday
+                            </div>
+                            <div class="schedule p-3" *ngFor="let day of tuesday;let idx = index"
+                                [style.backgroundColor]="day.color">
+                                <div class="d-flex align-items-center">
+                                    <div style="color: gray;">
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span class="ms-2">{{day.intervalFrom}}</span>
+                                        <span class="mx-1">-</span>
+                                        <span>{{day.intervalTo}}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 d-flex  justify-content-center">
+                                    <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                        [title]="day.subjectName">
+                                        {{day.subjectName}}</div>
+                                </div>
+                                <div class="mt-3 p-1 d-flex justify-content-center"
+                                    style="background-color: white;border-radius: 5px;">
+                                    <div *ngIf="!day.isBreak" class="ellipse"
+                                        [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                        {{role=='STUDENT'?day.teacherName:day.associationName}}
+                                    </div>
+                                    <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isWednesdayVisible" class="me-3 col">
+                            <div class="heading" style="background-color: #FEF8EA;">
+                                Wednesday
+                            </div>
+                            <div class="schedule p-3" *ngFor="let day of wednesday;let idx = index"
+                                [style.backgroundColor]="day.color">
+                                <div class="d-flex align-items-center">
+                                    <div style="color: gray;">
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span class="ms-2">{{day.intervalFrom}}</span>
+                                        <span class="mx-1">-</span>
+                                        <span>{{day.intervalTo}}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 d-flex  justify-content-center">
+                                    <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                        [title]="day.subjectName">
+                                        {{day.subjectName}}</div>
+                                </div>
+                                <div class="mt-3 p-1 d-flex justify-content-center"
+                                    style="background-color: white;border-radius: 5px;">
+                                    <div *ngIf="!day.isBreak" class="ellipse"
+                                        [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                        {{role=='STUDENT'?day.teacherName:day.associationName}}
+                                    </div>
+                                    <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isThursdayVisible" class="me-3 col">
+                            <div class="heading" style="background-color: #F2F5FF;">
+                                Thursday
+                            </div>
+                            <div class="schedule p-3" *ngFor="let day of thursday;let idx = index"
+                                [style.backgroundColor]="day.color">
+                                <div class="d-flex align-items-center">
+                                    <div style="color: gray;">
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span class="ms-2">{{day.intervalFrom}}</span>
+                                        <span class="mx-1">-</span>
+                                        <span>{{day.intervalTo}}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 d-flex  justify-content-center">
+                                    <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                        [title]="day.subjectName">
+                                        {{day.subjectName}}</div>
+                                </div>
+                                <div class="mt-3 p-1 d-flex justify-content-center"
+                                    style="background-color: white;border-radius: 5px;">
+                                    <div *ngIf="!day.isBreak" class="ellipse"
+                                        [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                        {{role=='STUDENT'?day.teacherName:day.associationName}}
+                                    </div>
+                                    <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isFridayVisible" class="me-3 col">
+                            <div class="heading" style="background-color: #E8F9E8;">
+                                Friday
+                            </div>
+                            <div class="schedule p-3" *ngFor="let day of friday;let idx = index"
+                                [style.backgroundColor]="day.color">
+                                <div class="d-flex align-items-center">
+                                    <div style="color: gray;">
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span class="ms-2">{{day.intervalFrom}}</span>
+                                        <span class="mx-1">-</span>
+                                        <span>{{day.intervalTo}}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 d-flex  justify-content-center">
+                                    <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                        [title]="day.subjectName">
+                                        {{day.subjectName}}</div>
+                                </div>
+                                <div class="mt-3 p-1 d-flex justify-content-center"
+                                    style="background-color: white;border-radius: 5px;">
+                                    <div *ngIf="!day.isBreak" class="ellipse"
+                                        [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                        {{role=='STUDENT'?day.teacherName:day.associationName}}
+                                    </div>
+                                    <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="isSaturdayVisible" class="me-3 col">
+                            <div class="heading" style="background-color: #E9EDF4;">
+                                Saturday
+                            </div>
+                            <div class="schedule p-3" *ngFor="let day of saturday;let idx = index"
+                                [style.backgroundColor]="day.color">
+                                <div class="d-flex align-items-center">
+                                    <div style="color: gray;">
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span class="ms-2">{{day.intervalFrom}}</span>
+                                        <span class="mx-1">-</span>
+                                        <span>{{day.intervalTo}}</span>
+                                    </div>
+                                </div>
+                                <div class="mt-1 d-flex justify-content-center">
+                                    <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                        [title]="day.subjectName">
+                                        {{day.subjectName}}</div>
+                                </div>
+                                <div class="mt-3 p-1 d-flex justify-content-center"
+                                    style="background-color: white;border-radius: 5px;">
+                                    <div *ngIf="!day.isBreak" class="ellipse"
+                                        [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                        {{role=='STUDENT'?day.teacherName:day.associationName}}
+                                    </div>
+                                    <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <mat-tab>
+                <ng-template mat-tab-label>
+                    <i class="fa fa-list-check"></i>&nbsp;&nbsp;Attendance
+                </ng-template>
+                <app-attendance-calendar [attendanceData]="attendanceData"
+                    (refreshAttendance)="getTeacherAttendance($event)"></app-attendance-calendar>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <div class="sidebar-logo d-flex align-items-center gap-2">
+            <a>
+                <!-- <img id="company-logo" src="../../assets/image/admin.jpg" class="img-fluid logo profilesidebar"
+                    alt="Logo"> -->
+            </a>
+            <span *ngIf="showLetter()" class="company-no-logo">BA</span>
+            <span class="ms-2"
+                style="font-size: 15px; font-weight: 700;">{{user.instituteName?user.instituteName:'LMS'}}</span>
+        </div>
+    </div>
+    <div class="sidebar-inner slimscroll">
+        <div id="sidebar-menu" class="sidebar-menu" style="max-height: 90vh;overflow: auto;">
+            <ul>
+                <ng-container *ngFor="let drawerItem of drawerItems; let drawerItemIndex=index">
+                    <li *ngIf="userIsPermitted(drawerItem.base)" class="pointer"
+                        [class.active]="base === drawerItem.base" (click)="handleMenuClick(drawerItemIndex)"
+                        [routerLink]="drawerItem.routeLink">
+                        <div class="menu-item-container" [ngClass]="{'subdrop': drawerItem.isSubMenuVisible === true}">
+                            <i class={{drawerItem.icon}}></i>
+                            <span class="menu-label">{{drawerItem.title}}</span>
+                            <span *ngIf="drawerItem.subMenu" class="menu-arrow"></span>
+                        </div>
+                    </li>
+                    <ul *ngIf="drawerItem.subMenu && drawerItem.isSubMenuVisible">
+                        <ng-container *ngFor="let subMenuItem of drawerItem.subMenu">
+                            <li class="pointer" [ngClass]="{'submenu-active': subMenuItem.isActive === true}"
+                                [routerLink]="subMenuItem.routeLink">
+                                <span>{{subMenuItem.title}}</span>
+                            </li>
+                        </ng-container>
+                    </ul>
+                </ng-container>
+            </ul>
+        </div>
+    </div>
+</div>

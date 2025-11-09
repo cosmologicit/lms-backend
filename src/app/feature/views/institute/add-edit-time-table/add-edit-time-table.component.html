@@ -1,0 +1,652 @@
+<div class="p-3">
+    <span class="title">{{status}} Time Table</span>
+</div>
+<div class="subjectd mb-0 card">
+    <div class="p-3">
+        <form #timeTableForm="ngForm" (ngSubmit)="onSubmit()">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Class*</label>
+                        <select type="text" class="form-select" name="class" [(ngModel)]="data.associationId"
+                            #class="ngModel" required (change)="filterSubjects()"
+                            [ngClass]="{'is-invalid':class.touched && class.errors && class.errors['required']}">
+                            <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                        </select>
+                        <p *ngIf="class.touched && class.errors && class.errors['required']" class="validation-error">
+                            Class is required
+                        </p>
+                    </div>
+                </div>
+                <!-- <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Period Start Time*</label>
+                        <input type="time" class="form-control" name="periodStartTime"
+                            [(ngModel)]="data.periodStartTime" #periodStartTime="ngModel" required
+                            [ngClass]="{'is-invalid':periodStartTime.touched && periodStartTime.errors && periodStartTime.errors['required']}">
+                        <p *ngIf="periodStartTime.touched && periodStartTime.errors && periodStartTime.errors['required']"
+                            class="validation-error">
+                            Period Start Time is required
+                        </p>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Duration(min)*</label>
+                        <select type="time" class="form-select" name="periodDuration" [(ngModel)]="data.periodDuration"
+                            #periodDuration="ngModel" required
+                            [ngClass]="{'is-invalid':periodDuration.touched && periodDuration.errors && periodDuration.errors['required']}">
+                            <option>15min</option>
+                            <option>30min</option>
+                            <option>45min</option>
+                            <option>60min</option>
+                        </select>
+                        <p *ngIf="periodDuration.touched && periodDuration.errors && periodDuration.errors['required']"
+                            class="validation-error">
+                            Period Duration is required
+                        </p>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Break Interval From*</label>
+                        <input type="time" class="form-control" name="breakIntervalFrom"
+                            [(ngModel)]="data.breakIntervalFrom" #breakIntervalFrom="ngModel" required
+                            [ngClass]="{'is-invalid':breakIntervalFrom.touched && breakIntervalFrom.errors && breakIntervalFrom.errors['required']}">
+                        <p *ngIf="breakIntervalFrom.touched && breakIntervalFrom.errors && breakIntervalFrom.errors['required']"
+                            class="validation-error">
+                            Break Interval From is required
+                        </p>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Duration(min)*</label>
+                        <select type="time" class="form-select" name="breakDuration" [(ngModel)]="data.breakDuration"
+                            #breakDuration="ngModel" required
+                            [ngClass]="{'is-invalid':breakDuration.touched && breakDuration.errors && breakDuration.errors['required']}">
+                            <option>15min</option>
+                            <option>30min</option>
+                            <option>45min</option>
+                            <option>60min</option>
+                        </select>
+                        <p *ngIf="breakDuration.touched && breakDuration.errors && breakDuration.errors['required']"
+                            class="validation-error">
+                            Break Duration is required
+                        </p>
+                    </div>
+                </div> -->
+            </div>
+        </form>
+
+        <div class="p-1 mt-3 mb-1" style="border-radius: 8px;">
+            <mat-tab-group class="days" [selectedIndex]="selected.value" (selectedIndexChange)="onTabChange($event)">
+                <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab">
+                    <!-- sunday  -->
+                    <div *ngIf="tab=='Sunday'" class="p-3" style="background-color: #E9EDF4;">
+                        <div class="d-flex justify-content-end align-items-center w-100">
+                            <span class="me-2" style="font-size: 13px;">Copy Data From</span>
+                            <select name="copy" class="form-select-sm" [(ngModel)]="getSundayData"
+                                (change)="setData('Sunday')">
+                                <option value=""><span class="text-secondary">--select--</span></option>
+                                <option *ngFor="let data of copydataTabs" [value]="data">{{data}}</option>
+                            </select>
+                        </div>
+                        <div *ngFor="let data of sunday;let idx=index">
+                            <div class="d-flex align-items-center">
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2" *ngIf="!data.isBreak">
+                                        <label>Subject</label>
+                                        <ng-select [(ngModel)]="data.subjectId" name="subject" appendTo="body">
+                                            <ng-option *ngFor="let subject of filteredSubjects"
+                                                [value]="subject.id">{{subject.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-field mt-2" *ngIf="data.isBreak">
+                                        <label>Period Name</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.periodName"
+                                            name="name" #name="ngModel">
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Teacher</label>
+                                        <ng-select [(ngModel)]="data.userId" name="teacher" appendTo="body">
+                                            <ng-option *ngFor="let teacher of teachers"
+                                                [value]="teacher.id">{{teacher.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time From</label>
+                                        <div *ngIf="idx==0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="startTime" [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)" readonly>
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                        <div *ngIf="idx!=0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="sunday[idx-1].intervalTo!" readonly [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)">
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time To</label>
+                                        <input [ngxTimepicker]="picker" class="form-control" name="intervalTo"
+                                            [(ngModel)]="data.intervalTo" #intervalTo="ngModel"
+                                            [min]="sunday[idx].intervalFrom!" [max]="endTime"
+                                            [disabled]="sunday[idx].intervalFrom==null || sunday[idx].intervalFrom==undefined"
+                                            readonly (ngModelChange)="validatePeriodsTimeTo(data.day!,idx)">
+                                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex justify-content-center" style="max-width: 100px;">
+                                    <div class="form-field mt-2">
+                                        <label>Break</label><br>
+                                        <input type="checkbox" class="form-check-input" title="break"
+                                            [(ngModel)]="data.isBreak" name="break">
+                                    </div>
+                                </div>
+                                <div class="pt-4 ps-3 mt-1">
+                                    <i class="fa fa-trash text-danger pointer me-3 mb-1" title="Delete"
+                                        (click)="removePeriod('sunday',idx)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- monday  -->
+                    <div *ngIf="tab=='Monday'" class="p-3" style="background-color: #E9EDF4;">
+                        <div class="d-flex justify-content-end align-items-center w-100">
+                            <span class="me-2" style="font-size: 13px;">Copy Data From</span>
+                            <select name="copy" class="form-select-sm" [(ngModel)]="getMondayData"
+                                (change)="setData('Monday')">
+                                <option value=""><span class="text-secondary">--select--</span></option>
+                                <option *ngFor="let data of copydataTabs" [value]="data">{{data}}</option>
+                            </select>
+                        </div>
+                        <div *ngFor="let data of monday;let idx=index">
+                            <div class="d-flex align-items-center">
+                                <div class="w-100" style=" margin-right: 10px;">
+                                    <div class="form-field mt-2" *ngIf="!data.isBreak">
+                                        <label>Subject</label>
+                                        <ng-select [(ngModel)]="data.subjectId" name="subject" appendTo="body">
+                                            <ng-option *ngFor="let subject of filteredSubjects"
+                                                [value]="subject.id">{{subject.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-field mt-2" *ngIf="data.isBreak">
+                                        <label>Period Name</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.periodName"
+                                            name="name" #name="ngModel">
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Teacher</label>
+                                        <ng-select [(ngModel)]="data.userId" name="teacher" appendTo="body">
+                                            <ng-option *ngFor="let teacher of teachers"
+                                                [value]="teacher.id">{{teacher.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time From</label>
+                                        <div *ngIf="idx==0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="startTime" [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)" readonly>
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                        <div *ngIf="idx!=0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="monday[idx-1].intervalTo!" readonly [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)">
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time To</label>
+                                        <input [ngxTimepicker]="picker" class="form-control" name="intervalTo"
+                                            [(ngModel)]="data.intervalTo" #intervalTo="ngModel"
+                                            [min]="monday[idx].intervalFrom!" [max]="endTime"
+                                            [disabled]="monday[idx].intervalFrom==null || monday[idx].intervalFrom==undefined"
+                                            readonly (ngModelChange)="validatePeriodsTimeTo(data.day!,idx)">
+                                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex justify-content-center" style="max-width: 100px;">
+                                    <div class="form-field mt-2">
+                                        <label>Break</label><br>
+                                        <input type="checkbox" class="form-check-input" title="break"
+                                            [(ngModel)]="data.isBreak" name="break">
+                                    </div>
+                                </div>
+                                <div class="pt-4 ps-3 mt-1">
+                                    <i class="fa fa-trash text-danger pointer me-3 mb-1" title="Delete"
+                                        (click)="removePeriod('monday',idx)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- tuesday  -->
+                    <div *ngIf="tab=='Tuesday'" class="p-3" style="background-color: #E9EDF4;">
+                        <div class="d-flex justify-content-end align-items-center w-100">
+                            <span class="me-2" style="font-size: 13px;">Copy Data From</span>
+                            <select name="copy" class="form-select-sm" [(ngModel)]="getTuesdayData"
+                                (change)="setData('Tuesday')">
+                                <option value=""><span class="text-secondary">--select--</span></option>
+                                <option *ngFor="let data of copydataTabs" [value]="data">{{data}}</option>
+                            </select>
+                        </div>
+                        <div *ngFor="let data of tuesday;let idx=index">
+                            <div class="d-flex align-items-center">
+                                <div class="w-100" style=" margin-right: 10px;">
+                                    <div class="form-field mt-2" *ngIf="!data.isBreak">
+                                        <label>Subject</label>
+                                        <ng-select [(ngModel)]="data.subjectId" name="subject" appendTo="body">
+                                            <ng-option *ngFor="let subject of filteredSubjects"
+                                                [value]="subject.id">{{subject.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-field mt-2" *ngIf="data.isBreak">
+                                        <label>Period Name</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.periodName"
+                                            name="name" #name="ngModel">
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Teacher</label>
+                                        <ng-select [(ngModel)]="data.userId" name="teacher" appendTo="body">
+                                            <ng-option *ngFor="let teacher of teachers"
+                                                [value]="teacher.id">{{teacher.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time From</label>
+                                        <div *ngIf="idx==0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="startTime" [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)" readonly>
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                        <div *ngIf="idx!=0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="tuesday[idx-1].intervalTo!" readonly [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)">
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time To</label>
+                                        <input [ngxTimepicker]="picker" class="form-control" name="intervalTo"
+                                            [(ngModel)]="data.intervalTo" #intervalTo="ngModel"
+                                            [min]="tuesday[idx].intervalFrom!" [max]="endTime"
+                                            [disabled]="tuesday[idx].intervalFrom==null || tuesday[idx].intervalFrom==undefined"
+                                            readonly (ngModelChange)="validatePeriodsTimeTo(data.day!,idx)">
+                                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex justify-content-center" style="max-width: 100px;">
+                                    <div class="form-field mt-2">
+                                        <label>Break</label><br>
+                                        <input type="checkbox" class="form-check-input" title="break"
+                                            [(ngModel)]="data.isBreak" name="break">
+                                    </div>
+                                </div>
+                                <div class="pt-4 ps-3 mt-1">
+                                    <i class="fa fa-trash text-danger pointer" title="Delete"
+                                        (click)="removePeriod('tuesday',idx)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- wednesday  -->
+                    <div *ngIf="tab=='Wednesday'" class="p-3" style="background-color: #E9EDF4;">
+                        <div class="d-flex justify-content-end align-items-center w-100">
+                            <span class="me-2" style="font-size: 13px;">Copy Data From</span>
+                            <select name="copy" class="form-select-sm" [(ngModel)]="getWednesdayData"
+                                (change)="setData('Wednesday')">
+                                <option value=""><span class="text-secondary">--select--</span></option>
+                                <option *ngFor="let data of copydataTabs" [value]="data">{{data}}</option>
+                            </select>
+                        </div>
+                        <div *ngFor="let data of wednesday;let idx=index">
+                            <div class="d-flex align-items-center">
+                                <div class="w-100" style=" margin-right: 10px;">
+                                    <div class="form-field mt-2" *ngIf="!data.isBreak">
+                                        <label>Subject</label>
+                                        <ng-select [(ngModel)]="data.subjectId" name="subject" appendTo="body">
+                                            <ng-option *ngFor="let subject of filteredSubjects"
+                                                [value]="subject.id">{{subject.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-field mt-2" *ngIf="data.isBreak">
+                                        <label>Period Name</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.periodName"
+                                            name="name" #name="ngModel">
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Teacher</label>
+                                        <ng-select [(ngModel)]="data.userId" name="teacher" appendTo="body">
+                                            <ng-option *ngFor="let teacher of teachers"
+                                                [value]="teacher.id">{{teacher.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time From</label>
+                                        <div *ngIf="idx==0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="startTime" [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)" readonly>
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                        <div *ngIf="idx!=0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="wednesday[idx-1].intervalTo!" readonly [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)">
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time To</label>
+                                        <input [ngxTimepicker]="picker" class="form-control" name="intervalTo"
+                                            [(ngModel)]="data.intervalTo" #intervalTo="ngModel"
+                                            [min]="wednesday[idx].intervalFrom!" [max]="endTime"
+                                            [disabled]="wednesday[idx].intervalFrom==null || wednesday[idx].intervalFrom==undefined"
+                                            readonly (ngModelChange)="validatePeriodsTimeTo(data.day!,idx)">
+                                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex justify-content-center" style="max-width: 100px;">
+                                    <div class="form-field mt-2">
+                                        <label>Break</label><br>
+                                        <input type="checkbox" class="form-check-input" title="break"
+                                            [(ngModel)]="data.isBreak" name="break">
+                                    </div>
+                                </div>
+                                <div class="pt-4 ps-3 mt-1">
+                                    <i class="fa fa-trash text-danger pointer" title="Delete"
+                                        (click)="removePeriod('wednesday',idx)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- thursday  -->
+                    <div *ngIf="tab=='Thursday'" class="p-3" style="background-color: #E9EDF4;">
+                        <div class="d-flex justify-content-end align-items-center w-100">
+                            <span class="me-2" style="font-size: 13px;">Copy Data From</span>
+                            <select name="copy" class="form-select-sm" [(ngModel)]="getThursdayData"
+                                (change)="setData('Thursday')">
+                                <option value=""><span class="text-secondary">--select--</span></option>
+                                <option *ngFor="let data of copydataTabs" [value]="data">{{data}}</option>
+                            </select>
+                        </div>
+                        <div *ngFor="let data of thursday;let idx=index">
+                            <div class="d-flex align-items-center">
+                                <div class="w-100" style=" margin-right: 10px;">
+                                    <div class="form-field mt-2" *ngIf="!data.isBreak">
+                                        <label>Subject</label>
+                                        <ng-select [(ngModel)]="data.subjectId" name="subject" appendTo="body">
+                                            <ng-option *ngFor="let subject of filteredSubjects"
+                                                [value]="subject.id">{{subject.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-field mt-2" *ngIf="data.isBreak">
+                                        <label>Period Name</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.periodName"
+                                            name="name" #name="ngModel">
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Teacher</label>
+                                        <ng-select [(ngModel)]="data.userId" name="teacher" appendTo="body">
+                                            <ng-option *ngFor="let teacher of teachers"
+                                                [value]="teacher.id">{{teacher.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time From</label>
+                                        <div *ngIf="idx==0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="startTime" [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)" readonly>
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                        <div *ngIf="idx!=0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="thursday[idx-1].intervalTo!" readonly [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)">
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time To</label>
+                                        <input [ngxTimepicker]="picker" class="form-control" name="intervalTo"
+                                            [(ngModel)]="data.intervalTo" #intervalTo="ngModel"
+                                            [min]="thursday[idx].intervalFrom!" [max]="endTime"
+                                            [disabled]="thursday[idx].intervalFrom==null || thursday[idx].intervalFrom==undefined"
+                                            readonly (ngModelChange)="validatePeriodsTimeTo(data.day!,idx)">
+                                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex justify-content-center" style="max-width: 100px;">
+                                    <div class="form-field mt-2">
+                                        <label>Break</label><br>
+                                        <input type="checkbox" class="form-check-input" title="break"
+                                            [(ngModel)]="data.isBreak" name="break">
+                                    </div>
+                                </div>
+                                <div class="pt-4 ps-3 mt-1">
+                                    <i class="fa fa-trash text-danger pointer" title="Delete"
+                                        (click)="removePeriod('thursday',idx)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- firday  -->
+                    <div *ngIf="tab=='Friday'" class="p-3" style="background-color: #E9EDF4;">
+                        <div class="d-flex justify-content-end align-items-center w-100">
+                            <span class="me-2" style="font-size: 13px;">Copy Data From</span>
+                            <select name="copy" class="form-select-sm" [(ngModel)]="getFridayData"
+                                (change)="setData('Friday')">
+                                <option value=""><span class="text-secondary">--select--</span></option>
+                                <option *ngFor="let data of copydataTabs" [value]="data">{{data}}</option>
+                            </select>
+                        </div>
+                        <div *ngFor="let data of friday;let idx=index">
+                            <div class="d-flex align-items-center">
+                                <div class="w-100" style=" margin-right: 10px;">
+                                    <div class="form-field mt-2" *ngIf="!data.isBreak">
+                                        <label>Subject</label>
+                                        <ng-select [(ngModel)]="data.subjectId" name="subject" appendTo="body">
+                                            <ng-option *ngFor="let subject of filteredSubjects"
+                                                [value]="subject.id">{{subject.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-field mt-2" *ngIf="data.isBreak">
+                                        <label>Period Name</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.periodName"
+                                            name="name" #name="ngModel">
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Teacher</label>
+                                        <ng-select [(ngModel)]="data.userId" name="teacher" appendTo="body">
+                                            <ng-option *ngFor="let teacher of teachers"
+                                                [value]="teacher.id">{{teacher.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time From</label>
+                                        <div *ngIf="idx==0">
+                                            <input [ngxTimepicker]="picker" class="form-control" [min]="startTime"
+                                                [max]="endTime" [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)" readonly>
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                        <div *ngIf="idx!=0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="friday[idx-1].intervalTo!" readonly [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)">
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time To</label>
+                                        <input [ngxTimepicker]="picker" class="form-control" name="intervalTo"
+                                            [(ngModel)]="data.intervalTo" #intervalTo="ngModel"
+                                            [min]="friday[idx].intervalFrom!" [max]="endTime"
+                                            [disabled]="friday[idx].intervalFrom==null || friday[idx].intervalFrom==undefined"
+                                            readonly (ngModelChange)="validatePeriodsTimeTo(data.day!,idx)">
+                                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex justify-content-center" style="max-width: 100px;">
+                                    <div class="form-field mt-2">
+                                        <label>Break</label><br>
+                                        <input type="checkbox" class="form-check-input" title="break"
+                                            [(ngModel)]="data.isBreak" name="break">
+                                    </div>
+                                </div>
+                                <div class="pt-4 ps-3 mt-1">
+                                    <i class="fa fa-trash text-danger pointer" title="Delete"
+                                        (click)="removePeriod('friday',idx)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- saturday  -->
+                    <div *ngIf="tab=='Saturday'" class="p-3" style="background-color: #E9EDF4;">
+                        <div class="d-flex justify-content-end align-items-center w-100">
+                            <span class="me-2" style="font-size: 13px;">Copy Data From</span>
+                            <select name="copy" class="form-select-sm" [(ngModel)]="getSaturdayData"
+                                (change)="setData('Saturday')">
+                                <option value=""><span class="text-secondary">--select--</span></option>
+                                <option *ngFor="let data of copydataTabs" [value]="data">{{data}}</option>
+                            </select>
+                        </div>
+                        <div *ngFor="let data of saturday;let idx=index">
+                            <div class="d-flex align-items-center">
+                                <div class="w-100" style=" margin-right: 10px;">
+                                    <div class="form-field mt-2" *ngIf="!data.isBreak">
+                                        <label>Subject</label>
+                                        <ng-select [(ngModel)]="data.subjectId" name="subject" appendTo="body">
+                                            <ng-option *ngFor="let subject of filteredSubjects"
+                                                [value]="subject.id">{{subject.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                    <div class="form-field mt-2" *ngIf="data.isBreak">
+                                        <label>Period Name</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.periodName"
+                                            name="name" #name="ngModel">
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Teacher</label>
+                                        <ng-select [(ngModel)]="data.userId" name="teacher" appendTo="body">
+                                            <ng-option *ngFor="let teacher of teachers"
+                                                [value]="teacher.id">{{teacher.name}}</ng-option>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time From</label>
+                                        <div *ngIf="idx==0">
+                                            <input [ngxTimepicker]="picker" class="form-control" [min]="startTime"
+                                                [max]="endTime" [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)" readonly>
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                        <div *ngIf="idx!=0">
+                                            <input [ngxTimepicker]="picker" class="form-control"
+                                                [(ngModel)]="data.intervalFrom" #intervalFrom="ngModel"
+                                                [min]="saturday[idx-1].intervalTo!" readonly [max]="endTime"
+                                                (ngModelChange)="periodTimeTo(data.day!,idx)">
+                                            <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="w-100" style="margin-right: 10px;">
+                                    <div class="form-field mt-2">
+                                        <label>Time To</label>
+                                        <input [ngxTimepicker]="picker" class="form-control" name="intervalTo"
+                                            [(ngModel)]="data.intervalTo" #intervalTo="ngModel"
+                                            [min]="saturday[idx].intervalFrom!" [max]="endTime"
+                                            [disabled]="saturday[idx].intervalFrom==null || saturday[idx].intervalFrom==undefined"
+                                            readonly (ngModelChange)="validatePeriodsTimeTo(data.day!,idx)">
+                                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                                    </div>
+                                </div>
+                                <div class="w-100 d-flex justify-content-center" style="max-width: 100px;">
+                                    <div class="form-field mt-2">
+                                        <label>Break</label><br>
+                                        <input type="checkbox" class="form-check-input" title="break"
+                                            [(ngModel)]="data.isBreak" name="break">
+                                    </div>
+                                </div>
+                                <div class="pt-4 ps-3 mt-1">
+                                    <i class="fa fa-trash text-danger pointer" title="Delete"
+                                        (click)="removePeriod('saturday',idx)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+    <hr class="m-0">
+    <div class="p-3 d-flex justify-content-between">
+        <div>
+            <button class="btn btn-primary" (click)="addNew()"><i class="fa fa-plus-circle me-2"></i>Add
+                New</button>
+        </div>
+        <div>
+            <button type="button" class="btn btn-secondary me-2" (click)="cancel()">Cancel</button>
+            <button type="submit" class="btn btn-primary"
+                (click)="onSubmit()">{{status=='Add'?'Save':'Update'}}</button>
+        </div>
+    </div>
+</div>

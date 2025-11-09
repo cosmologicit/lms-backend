@@ -1,0 +1,234 @@
+<div class="d-flex justify-content-between px-3 my-2">
+    <p class="title">Time Table</p>
+    <button class="btn btn-primary" (click)="createTimeTable()" *ngIf="role=='INSTITUTE_ADMIN'">
+        <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Time Table
+    </button>
+</div>
+<div class="card m-2 mt-3 p-4">
+    <!-- admin time table  -->
+
+    <div class="row" *ngIf="role=='INSTITUTE_ADMIN'">
+        <div class="col-3 my-2 px-4" *ngFor="let data of timeTables">
+            <mat-card class="shadow mt-1 p-3">
+                <div>
+                    <div class="d-flex justify-content-between">
+                        <div>Class:&nbsp;{{data.associationName}}</div>
+                        <div><i class="fa fa-pen-to-square pointer" (click)="editTimeTable(data.id!)"
+                                *ngIf="role=='INSTITUTE_ADMIN'"></i></div>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+
+    <!-- student techer timetable  -->
+
+    <div style="width: 100%;" *ngIf="role!='INSTITUTE_ADMIN'">
+        <div class="d-flex justify-content-between" style="max-width: 80vw;overflow: auto; ">
+            <div *ngIf="isSundayVisible" class="me-3">
+                <div class="heading" style="background-color: #FDE9ED;">
+                    Sunday
+                </div>
+                <div>
+                    <div class="schedule p-3" *ngFor="let day of sunday;let idx = index"
+                        [style.backgroundColor]="day.color">
+                        <div class="d-flex align-items-center">
+                            <div style="color: gray;">
+                                <i class="fa-regular fa-clock"></i>
+                                <span class="ms-2">{{day.intervalFrom}}</span>
+                                <span class="mx-1">-</span>
+                                <span>{{day.intervalTo}}</span>
+                            </div>
+                        </div>
+                        <div class="mt-1 d-flex justify-content-center">
+                            <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                [title]="day.subjectName">{{day.subjectName}}</div>
+                        </div>
+                        <div class="mt-3 p-1 d-flex justify-content-center"
+                            style="background-color: white;border-radius: 5px;">
+                            <div *ngIf="!day.isBreak" class="ellipse"
+                                [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                {{role=='STUDENT'?day.teacherName:day.associationName}}
+                            </div>
+                            <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isMondayVisible" class="me-3">
+                <div class="heading" style="background-color: #FDE9ED;">
+                    Monday
+                </div>
+                <div>
+                    <div class="schedule p-3" *ngFor="let day of monday;let idx = index"
+                        [style.backgroundColor]="day.color">
+                        <div class="d-flex align-items-center">
+                            <div style="color: gray;">
+                                <i class="fa-regular fa-clock"></i>
+                                <span class="ms-2">{{day.intervalFrom}}</span>
+                                <span class="mx-1">-</span>
+                                <span>{{day.intervalTo}}</span>
+                            </div>
+                        </div>
+                        <div class="mt-1 d-flex justify-content-center">
+                            <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;"
+                                [title]="day.subjectName">{{day.subjectName}}</div>
+                        </div>
+                        <div class="mt-3 p-1 d-flex justify-content-center"
+                            style="background-color: white;border-radius: 5px;">
+                            <div *ngIf="!day.isBreak" class="ellipse"
+                                [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                {{role=='STUDENT'?day.teacherName:day.associationName}}
+                            </div>
+                            <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                        </div>
+                        <!-- <div class="mt-3 p-1 d-flex justify-content-center" *ngIf="role=='TEACHER'">
+                            <button class="btn btn-secondary"
+                                (click)="attendence(day.associationId!)">Attendance</button>
+                        </div> -->
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isTuesdayVisible" class="me-3">
+                <div class="heading" style="background-color: #E6F9FF;">
+                    Tuesday
+                </div>
+                <div class="schedule p-3" *ngFor="let day of tuesday;let idx = index"
+                    [style.backgroundColor]="day.color">
+                    <div class="d-flex align-items-center">
+                        <div style="color: gray;">
+                            <i class="fa-regular fa-clock"></i>
+                            <span class="ms-2">{{day.intervalFrom}}</span>
+                            <span class="mx-1">-</span>
+                            <span>{{day.intervalTo}}</span>
+                        </div>
+                    </div>
+                    <div class="mt-1 d-flex  justify-content-center">
+                        <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;" [title]="day.subjectName">
+                            {{day.subjectName}}</div>
+                    </div>
+                    <div class="mt-3 p-1 d-flex justify-content-center"
+                        style="background-color: white;border-radius: 5px;">
+                        <div *ngIf="!day.isBreak" class="ellipse"
+                            [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                            {{role=='STUDENT'?day.teacherName:day.associationName}}
+                        </div>
+                        <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isWednesdayVisible" class="me-3">
+                <div class="heading" style="background-color: #FEF8EA;">
+                    Wednesday
+                </div>
+                <div class="schedule p-3" *ngFor="let day of wednesday;let idx = index"
+                    [style.backgroundColor]="day.color">
+                    <div class="d-flex align-items-center">
+                        <div style="color: gray;">
+                            <i class="fa-regular fa-clock"></i>
+                            <span class="ms-2">{{day.intervalFrom}}</span>
+                            <span class="mx-1">-</span>
+                            <span>{{day.intervalTo}}</span>
+                        </div>
+                    </div>
+                    <div class="mt-1 d-flex  justify-content-center">
+                        <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;" [title]="day.subjectName">
+                            {{day.subjectName}}</div>
+                    </div>
+                    <div class="mt-3 p-1 d-flex justify-content-center"
+                        style="background-color: white;border-radius: 5px;">
+                        <div *ngIf="!day.isBreak" class="ellipse"
+                            [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                            {{role=='STUDENT'?day.teacherName:day.associationName}}
+                        </div>
+                        <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isThursdayVisible" class="me-3">
+                <div class="heading" style="background-color: #F2F5FF;">
+                    Thursday
+                </div>
+                <div class="schedule p-3" *ngFor="let day of thursday;let idx = index"
+                    [style.backgroundColor]="day.color">
+                    <div class="d-flex align-items-center">
+                        <div style="color: gray;">
+                            <i class="fa-regular fa-clock"></i>
+                            <span class="ms-2">{{day.intervalFrom}}</span>
+                            <span class="mx-1">-</span>
+                            <span>{{day.intervalTo}}</span>
+                        </div>
+                    </div>
+                    <div class="mt-1 d-flex  justify-content-center">
+                        <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;" [title]="day.subjectName">
+                            {{day.subjectName}}</div>
+                    </div>
+                    <div class="mt-3 p-1 d-flex justify-content-center"
+                        style="background-color: white;border-radius: 5px;">
+                        <div *ngIf="!day.isBreak" class="ellipse"
+                            [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                            {{role=='STUDENT'?day.teacherName:day.associationName}}
+                        </div>
+                        <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isFridayVisible" class="me-3">
+                <div class="heading" style="background-color: #E8F9E8;">
+                    Friday
+                </div>
+                <div class="schedule p-3" *ngFor="let day of friday;let idx = index"
+                    [style.backgroundColor]="day.color">
+                    <div class="d-flex align-items-center">
+                        <div style="color: gray;">
+                            <i class="fa-regular fa-clock"></i>
+                            <span class="ms-2">{{day.intervalFrom}}</span>
+                            <span class="mx-1">-</span>
+                            <span>{{day.intervalTo}}</span>
+                        </div>
+                    </div>
+                    <div class="mt-1 d-flex  justify-content-center">
+                        <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;" [title]="day.subjectName">
+                            {{day.subjectName}}</div>
+                    </div>
+                    <div class="mt-3 p-1 d-flex justify-content-center"
+                        style="background-color: white;border-radius: 5px;">
+                        <div *ngIf="!day.isBreak" class="ellipse"
+                            [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                            {{role=='STUDENT'?day.teacherName:day.associationName}}
+                        </div>
+                        <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isSaturdayVisible" class="me-3">
+                <div class="heading" style="background-color: #E9EDF4;">
+                    Saturday
+                </div>
+                <div class="schedule p-3" *ngFor="let day of saturday;let idx = index"
+                    [style.backgroundColor]="day.color">
+                    <div class="d-flex align-items-center">
+                        <div style="color: gray;">
+                            <i class="fa-regular fa-clock"></i>
+                            <span class="ms-2">{{day.intervalFrom}}</span>
+                            <span class="mx-1">-</span>
+                            <span>{{day.intervalTo}}</span>
+                        </div>
+                    </div>
+                    <div class="mt-1 d-flex justify-content-center">
+                        <div *ngIf="!day.isBreak" class="ellipse" style="max-width: 130px;" [title]="day.subjectName">
+                            {{day.subjectName}}</div>
+                    </div>
+                    <div class="mt-3 p-1 d-flex justify-content-center"
+                        style="background-color: white;border-radius: 5px;">
+                        <div *ngIf="!day.isBreak" class="ellipse"
+                            [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                            {{role=='STUDENT'?day.teacherName:day.associationName}}
+                        </div>
+                        <div *ngIf="day.isBreak">{{day.periodName}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="card mb-0">
+    <div class="p-3 d-flex justify-content-between align-items-center">
+        <span class="title">{{status}} Holiday</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        <form #holidayForm="ngForm">
+            <div class="form-field mt-2">
+                <label class="label">Title*</label>
+                <input type="text" class="form-control" name="title" [(ngModel)]="data.title" #title="ngModel" required
+                    [ngClass]="{'is-invalid':title.touched && title.errors && title.errors['required']}">
+                <p *ngIf="title.touched && title.errors && title.errors['required']" class="validation-error ">
+                    Title is required
+                </p>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Start Date*</label>
+                <input type="date" class="form-control" name="startDate" [(ngModel)]="data.startDate"
+                    #startDate="ngModel" required (change)="setEndTime()"
+                    [ngClass]="{'is-invalid':startDate.touched && startDate.errors && startDate.errors['required']}">
+                <p *ngIf="startDate.touched && startDate.errors && startDate.errors['required']"
+                    class="validation-error ">
+                    Start Date is required
+                </p>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">End Date*</label>
+                <input type="date" class="form-control" name="endDate" [(ngModel)]="data.endDate" #endDate="ngModel"
+                    [min]="data.startDate!" required
+                    [ngClass]="{'is-invalid':endDate.touched && endDate.errors && endDate.errors['required']}">
+                <p *ngIf="endDate.touched && endDate.errors && endDate.errors['required']" class="validation-error ">
+                    End Date is required
+                </p>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Description</label>
+                <textarea type="text" class="form-control h-100" name="description" [(ngModel)]="data.description"
+                    #description="ngModel" rows="2"></textarea>
+            </div>
+        </form>
+    </div>
+    <hr class="m-0">
+    <div class="d-flex justify-content-end p-3">
+        <button type="button" class="btn btn-secondary me-2" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">{{status=='Add'?'Save':'Update'}}</button>
+    </div>
+</div>

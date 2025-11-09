@@ -1,0 +1,45 @@
+<div class="card mb-0" style="max-height: 90vh;overflow: auto; ">
+    <div class="name d-flex justify-content-between align-items-center p-3">
+        <span class="title">{{status}} Subject</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <form #subjectForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="p-3">
+            <div class="form-field">
+                <label class="label">Name*</label>
+                <input type="text" class="form-control" [(ngModel)]="data.name" name="name" #name="ngModel" required
+                    [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                <p *ngIf="name.touched && name.errors && name.errors['required']" class="validation-error ">
+                    Name is required
+                </p>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Code</label>
+                <input type="text" class="form-control" [(ngModel)]="data.code" name="code" #code="ngModel">
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+                <input type="checkbox" class="me-2 mb-1 pointer" [(ngModel)]="isSelectAll" name="check"
+                    (change)="checkAll()" style="align-self: flex-end">{{selectUnselectText}}
+            </div>
+            <div class="form-field mt-3">
+                <label class="label">Class</label>
+                <mat-select class="form-select" name="item" [(ngModel)]="data.associationIds" multiple>
+                    <div class="drop-down">
+                        <mat-option *ngFor="let class of classes" [value]="class.id">{{class.name}}</mat-option>
+                    </div>
+                </mat-select>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Description</label>
+                <textarea type="text" class="form-control" rows="2" style="height: 100%;" [(ngModel)]="data.description"
+                    name="description" #description="ngModel"></textarea>
+            </div>
+        </div>
+        <hr class="m-0">
+        <div class="d-flex justify-content-end p-3">
+            <button type="button" class=" btn btn-secondary me-2" (click)="close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">{{status=='Add'?'Save':'Update'}}</button>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,82 @@
+<div class="d-flex justify-content-between px-3 my-2">
+    <p class="title">{{examName|titlecase}}</p>
+</div>
+<div class="card m-2 mt-3 p-4 mb-0">
+    <div class="d-flex justify-content-end">
+        <div class="input-group flex-nowrap" style="width: 350px;">
+            <span class="input-group-text">
+                <i class="material-icons icon">search</i>
+            </span>
+            <input placeholder="Search" type="text" class="form-control" [(ngModel)]="filterExamtext"
+                #searchFee="ngModel" name="searchFee" (keyup)="filterExam()">
+        </div>
+    </div>
+
+    <div class="mt-4" style="max-height: 54vh;overflow: auto;scrollbar-width: none;">
+        <ngx-datatable #dataTable class="material striped" [rows]="filteredStudents" [headerHeight]="40"
+            [footerHeight]="50" rowHeight="auto" [columnMode]="ColumnMode.force" [count]="10">
+            <ngx-datatable-column name="#" [width]="70" [canAutoResize]="false">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ rowIndex + 1 }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Name" prop="studentName" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span class="ellipse">{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Attendance" prop="attendanceStatus" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <div class="input-effect">
+                        <select class="border-effect" name="attendance" [(ngModel)]="row.attendanceStatus"
+                            (change)="setMarksAndAttendance(rowIndex,'Attendance')">
+                            <option value="PRESENT">Present</option>
+                            <option value="ABSENT">Absent</option>
+                            <option value="LEAVE">Leave</option>
+                        </select>
+                        <span class="focus-border"></span>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Obtained Marks" prop="marks" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <div class="input-effect">
+                        <input class="border-effect" type="number" placeholder="Marks" [(ngModel)]="row.marks"
+                            name="marks" (blur)="setMarksAndAttendance(rowIndex,'Marks')">
+                        <span class="focus-border"></span>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Grade" prop="grade" [width]="100">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Remark" prop="comments" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <div class="input-effect">
+                        <input class="border-effect" type="text" placeholder="Remark" [(ngModel)]="row.comments"
+                            name="remark">
+                        <span class="focus-border"></span>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Status" prop="examStatus" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+    <div class="d-flex justify-content-end p-3">
+        <button class="btn btn-secondary me-2" [routerLink]="'/app/class/exam'">Cancel</button>
+        <button class="btn btn-primary" (click)="onSubmit()">Save</button>
+    </div>
+</div>

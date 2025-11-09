@@ -1,0 +1,101 @@
+<div class="d-flex justify-content-between px-3 my-2">
+    <p class="title">Announcement</p>
+    <button class="btn btn-primary" (click)="addAnnouncement()" *ngIf="role!='STUDENT'">
+        <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Announcement
+    </button>
+</div>
+<div class="card m-2 mt-3 p-4">
+    <div class="d-flex justify-content-between">
+        <div>
+            <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(ngModel)]="toggleValue">
+                <mat-button-toggle value="card">
+                    <mat-icon color="primary">dashboard</mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle value="table">
+                    <mat-icon color="primary">table_rows_narrow</mat-icon>
+                </mat-button-toggle>
+            </mat-button-toggle-group> -->
+        </div>
+        <div>
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">
+                    <i class="material-icons icon">search</i>
+                </span>
+                <input placeholder="Search Announcement" type="text" class="form-control" style="width: 350px;"
+                    [(ngModel)]="filterAnnouncementText" #searchAnnouncement="ngModel" name="searchAnnouncement"
+                    (keyup)="filterAnnouncement()">
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="toggleValue == 'card'" class="row mt-2 pb-3" style="max-height: 69vh; overflow: auto;">
+        <div class="col-3 my-2 px-4 pt-4" *ngFor="let data of filteredAnnouncement">
+            <mat-card class="shadow mt-4">
+                <div class="img-download">
+                    <a *ngIf="role!='STUDENT'">
+                        <button mat-icon-button title="Edit" (click)="editAnnouncement(data.id!)">
+                            <mat-icon style="color: #8472FC;">edit_square</mat-icon>
+                        </button>
+                        <button mat-icon-button title="Delete" (click)="deleteAnnouncement(data.id!)">
+                            <mat-icon style="color: #fa5757;">delete</mat-icon>
+                        </button>
+                    </a>
+                </div>
+
+                <div class="row mt-2 mb-4 ps-2">
+                    <div class="row">
+                        <div class="col-5">
+                            <span style="font-weight: 500;">Title</span>
+                        </div>
+                        <div class="col-6 ms-2">
+                            <div [title]="data.title" class="ellipse">{{data.title}}</div>
+                        </div>
+                    </div>
+                    <!-- <div class="row mt-2">
+                        <div class="col-5">
+                            <span style="font-weight: 500;">Phone</span>
+                        </div>
+                        <div class="col-6 ms-2">
+                            <div [title]="data.phone" class="ellipse">{{data.phone}}</div>
+                        </div>
+                    </div> -->
+                </div>
+            </mat-card>
+        </div>
+    </div>
+
+    <div *ngIf="toggleValue == 'table'" class="mt-4">
+        <ngx-datatable #dataTable class="material striped" [rows]="filteredAnnouncement" [headerHeight]="40"
+            [footerHeight]="50" rowHeight="auto" [columnMode]="ColumnMode.force" [count]="10">
+            <ngx-datatable-column name="#" [width]="70" [canAutoResize]="false">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ rowIndex + 1 }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Title" prop="title" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Description" prop="description" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <div class="pointer ellipse" [title]="value">{{ value }}</div>
+                </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Action" prop="id" [width]="200" *ngIf="role!='STUDENT'">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <div class="d-flex">
+                        <i class="fa-solid fa-pen-to-square pointer ms-3" style="color: #1b3e99;"
+                            (click)="editAnnouncement(value)"></i>
+                        <i class="fa fa-trash text-danger ms-3 pointer" (click)="deleteAnnouncement(value)"></i>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
+        </ngx-datatable>
+    </div>
+</div>

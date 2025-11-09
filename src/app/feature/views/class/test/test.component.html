@@ -1,0 +1,140 @@
+<div class="card" #testContainer>
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <div>{{test.title}}</div>
+        <div class="timer">{{timer| async}}</div>
+        <div><i class="fa-solid fa-expand pointer" style="font-size: 20px;color: gray;"
+                (click)="toggleFullScreen()"></i></div>
+    </div>
+    <!-- <hr class="m-0"> -->
+    <div>
+        <div class="d-flex">
+            <div class="col-9 p-0">
+                <div class="question-header">
+                    <div class="d-flex align-items-center">
+                        <div>Sections | &nbsp;</div>
+                        <div class="sections">
+                            <span class="section" [ngClass]="{'selected-section':i==acticeSectionIndex}"
+                                *ngFor="let section of test.sections;let i=index">
+                                <span (click)="sectionChange(section.id!)"
+                                    style="cursor: pointer;">{{section.name}}</span>
+                            </span>
+                        </div>
+                    </div>
+                    <!-- <div class="d-flex align-items-center">
+                        <div>Elementary Mathematics</div>
+                        <button class="btn btn-primary sml ms-3">English</button>
+                    </div> -->
+                    <div>
+                        View In <select class="form-select-sm ms-1">
+                            <option>English</option>
+                            <option>Hindi</option>
+                        </select>
+                    </div>
+                </div>
+                <div *ngFor="let question of test.sections![acticeSectionIndex].questions;let idx=index">
+                    <div *ngIf="idx==selectedQuestionIndex">
+                        <div class="question-number-details">
+                            <div>Question {{idx+1}}</div>
+                            <div class="d-flex align-items-center">
+                                <div class="time-and-mark-box">Time: {{getActiveQuestion()?.timer}}</div>
+                                <div class="time-and-mark-box mx-3">
+                                    <span>Marks</span>
+                                    <span class="text-success mx-2">+{{question.positiveMark}}</span>
+                                    <span class="text-danger">{{question.negativeMark}}</span>
+                                </div>
+                                <!-- <div style="font-size: 15px;"><i class="fa-solid fa-circle-exclamation"></i> Report</div> -->
+                            </div>
+                        </div>
+                        <div class="question" style="overflow: auto;"
+                            [ngStyle]="{ 'max-height': isFullScreen ? '75vh' : '55vh', 'min-height': isFullScreen ? '75vh' : '55vh' }">
+                            <div style="font-size: 18px;color: gray;">
+                                <span style="font-weight: 500;color:#282828;font-size: 18px;">Direction:
+                                </span>
+                                {{question.question}}
+                            </div>
+                            <div class="mt-3" *ngIf="question.type=='MCQ'">
+                                <div class="options" *ngFor="let option of question.options;let i=index">
+                                    <label [for]="option.id" class="ms-2 w-100 d-flex align-items-center">
+                                        <input type="radio" [id]="option.id" name="radiocheck" [value]="option.id"
+                                            [(ngModel)]="option.correct">
+                                        <span class="ms-2">{{ option.text }}</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="question-bottom">
+                    <div class=" d-flex justify-content-between align-items-center">
+                        <div class="d-flex">
+                            <span class="time-and-mark-box pointer btn me-2" (click)="markedAndReviewNext()">Mark for
+                                Review & Next</span>
+                            <span class="time-and-mark-box btn pointer" (click)="clearResponse()">Clear Response</span>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary">Save & Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="review-details py-2">
+                    <div style="font-size: 17px;" class="d-flex justify-content-center align-items-center">
+                        <img src="../../../../../assets/images/Default icon.png" alt="default-icon" width="35px" hei
+                            style="border-radius: 50%;"> <span class="ms-2">Kush Raghav</span>
+                    </div>
+                    <div class="w-100 mt-3 d-flex">
+                        <div class="d-flex col-6 ps-2">
+                            <div class="attemped">0</div>
+                            Attemped
+                        </div>
+                        <div class="d-flex col-6">
+                            <div class="marked">0</div>
+                            Marked
+                        </div>
+                    </div>
+                    <div class="d-flex w-100 mt-3">
+                        <div class="d-flex col-6 ps-2">
+                            <div class="not-visited">19</div>
+                            Not Visited
+                        </div>
+                        <div class="d-flex col-6">
+                            <div class="not-answered">1</div>
+                            Not Answered
+                        </div>
+                    </div>
+                    <div class="d-flex mt-3">
+                        <div class="d-flex col-12 ps-2 w-100">
+                            <div class="markedAndAnswered">
+                                0
+                                <i class="fa-solid fa-check check"></i>
+                            </div>
+                            Marked & Answered
+                        </div>
+                    </div>
+                </div>
+                <div class="number-section">
+                    <span style="font-weight: 500;">Section:
+                    </span><span>{{test.sections![acticeSectionIndex].name}}</span>
+                </div>
+                <div style="background-color: rgb(233, 233, 255);">
+                    <div style="overflow: auto;"
+                        [ngStyle]="{ 'max-height': isFullScreen ? '55vh' : '31vh', 'min-height': isFullScreen ? '55vh' : '31vh' }">
+                        <div class="question-numbers-box p-2">
+                            <div class="question-number" style="width: 45px;"
+                                [ngClass]="{'attemped':question.isAttempted,'marked':question.isMarked,'not-answered':question.isNotAnswered,'markedAndAnswered':question.isMarkedAndAnswered,'not-visited border':question.isNotVisited}"
+                                *ngFor="let question of test.sections![acticeSectionIndex].questions;let idx=index"
+                                (click)="questionChange(question.id!)">
+                                <span>{{idx+1}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-2 pb-2">
+                        <button class="btn instruction-btn w-100">Instructions</button>
+                        <button class="btn btn-primary w-100">SUBMIT TEST</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

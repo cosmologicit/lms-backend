@@ -1,0 +1,30 @@
+<div class="header">
+    <div style="margin-top: 10px;">
+        <div class="header-menus">
+            <div class="d-flex align-items-center gap-2 pointer">
+                <!-- <div class="d-flex align-items-center gap-2 pointer" [matMenuTriggerFor]="menu"> -->
+                <!-- <img id="company-logo" src="../../assets/image/admin.jpg" class="img-fluid logo profilesidebar"
+                    alt="Logo"> -->
+                <div class="d-flex align-items-center pt-2">
+                    <div class="username">{{user.name | titlecase}}</div>
+                    <i class="fa-solid fa-right-from-bracket pointer ms-3" (click)="logOut('auth/login')"></i>
+                    <!-- <div class="user-role">Administrator</div> -->
+                </div>
+                <!-- <i style="margin-left: 10px;" class="fa fa-angle-down"></i> -->
+            </div>
+            <!-- <mat-menu #menu="matMenu">
+                <div class="d-flex align-items-center gap-3 px-3">
+                    <img class="user-profile-img" height="40" src="../../assets/image/admin.jpg" alt="User DP">
+                    <div>
+                        <div style="font-size: 14;"><strong>John Doe</strong></div>
+                        <div style="font-size: 12;">johndoegmail.com</div>
+                    </div>
+                </div>
+                <hr style="margin: 10px 0px;">
+                <button mat-menu-item (click)="logOut('auth/login')">
+                    Log Out
+                </button>
+            </mat-menu> -->
+        </div>
+    </div>
+</div>

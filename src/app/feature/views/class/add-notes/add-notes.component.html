@@ -1,0 +1,148 @@
+<div class="card mb-0" style="max-height: 99vh;overflow: auto; ">
+    <div class="p-3 d-flex justify-content-between align-items-center">
+        <span class="title">{{status}} Notes</span>
+        <i class="fa fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        <form #notesForm="ngForm" (ngSubmit)="onSubmit()" *ngIf="status!='View'">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-field mt-2">
+                        <label class="label">Title*</label>
+                        <input type="text" class="form-control" name="title" [(ngModel)]="data.title" #title="ngModel"
+                            required
+                            [ngClass]="{'is-invalid':title.touched && title.errors && title.errors['required']}">
+                        <p *ngIf="title.touched && title.errors && title.errors['required']" class="validation-error ">
+                            Title is required
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-2">
+                        <label class="label">Class</label>
+                        <select name="class" [(ngModel)]="data.associationId" class="form-select" #class="ngModel"
+                            (change)="filterSubjects()">
+                            <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6" *ngIf="data.associationId && filteredSubjects.length>0">
+                    <div class="form-field mt-4">
+                        <label class="label">Subject</label>
+                        <select name="subject" [(ngModel)]="data.subjectId" class="form-select" #subject="ngModel"
+                            (click)="filterChapters()">
+                            <option *ngFor="let subject of filteredSubjects" [value]="subject.id">{{subject.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6" *ngIf="data.subjectId && filteredChapters.length>0">
+                    <div class="form-field mt-4">
+                        <label class="label">Chapter</label>
+                        <select name="chapter" [(ngModel)]="data.chapterId" class="form-select" #chapter="ngModel">
+                            <option *ngFor="let chapter of filteredChapters" [value]="chapter.id">{{chapter.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Description</label>
+                        <textarea class="form-control" rows="3" style="height: 100%;" name="description"
+                            [(ngModel)]="data.description" #description="ngModel"></textarea>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="mt-4">
+                        <input type="file" multiple id="file" (change)="selectFiles($event)" hidden>
+                        <button type="button" class="btn btn-primary" (click)="chooseFiles()"
+                            *ngIf="details.type!='View'">Choose Files</button>
+                    </div>
+                </div>
+
+                <!-- <div class="col-12 d-flex mt-2" *ngIf="selectedFiles && selectedFiles.length>0">
+                    <div class="file-list ">
+                        <div class="file-item" *ngFor="let file of selectedFiles;let idx=index">
+                            <span class="ellipse" (click)="openFile(file)" [title]="file.name">{{ file.name }}</span>
+                            <i class="fa-regular fa-x pointer ms-2 pointer" (click)="removeFile(idx)"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 d-flex mt-2" *ngIf="getNotes.files && getNotes.files.length>0">
+                    <div class="file-list ">
+                        <div class="file-item" *ngFor="let file of getNotes.files;let idx=index">
+                            <span class="ellipse" (click)="openGetFile(file.filePath!)" [title]="file.fileName">{{
+                                file.fileName
+                                }}</span>
+                            <i class="fa-regular fa-x pointer ms-2" (click)="removeGetFile(file.id!)"></i>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </form>
+        <div class="d-flex" style="flex-wrap: wrap;">
+            <!-- set files -->
+            <div class="file-container" *ngIf="selectedFiles && selectedFiles.length>0">
+                <div class="file-item" *ngFor="let file of selectedFiles;let i=index" [title]="file.name">
+                    <div class="file-icon">
+                        <i *ngIf="details.type!='View'" class="fa-regular fa-x cross" (click)="removeFile(i)"></i>
+                        <div class="d-flex justify-content-center align-items-center" style="height: 140px;"
+                            (click)="openFile(file)">
+                            <ng-container [ngSwitch]="file.type" class="files">
+                                <i *ngSwitchCase="'application/pdf'" class="fa-regular fa-file-pdf files"></i>
+                                <i *ngSwitchCase="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
+                                    class="fa-regular fa-file-excel files"></i>
+                                <i *ngSwitchCase="'application/msword files'"></i>
+                                <img *ngSwitchCase="'image/apng'" [src]="file.src">
+                                <img *ngSwitchCase="'image/avif'" [src]="file.src">
+                                <img *ngSwitchCase="'image/gif'" [src]="file.src">
+                                <img *ngSwitchCase="'image/png'" [src]="file.src">
+                                <img *ngSwitchCase="'image/jpg'" [src]="file.src">
+                                <img *ngSwitchCase="'image/jpeg'" [src]="file.src">
+                                <img *ngSwitchCase="'image/svg'" [src]="file.src">
+                                <img *ngSwitchCase="'image/webp'" [src]="file.src">
+                                <i *ngSwitchDefault class="fa-regular fa-file files"></i>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="file-name ellipse">{{ file.name }}</div>
+                </div>
+            </div>
+
+            <!-- get files  -->
+            <div class="file-container" *ngIf="getNotes.files && getNotes.files.length>0">
+                <div class="file-item" (click)="openGetFile(file.filePath!)"
+                    *ngFor="let file of getNotes.files;let i =index" [title]="file.fileName">
+                    <div class="file-icon">
+                        <i *ngIf="details.type!='View'" class="fa-regular fa-x cross"
+                            (click)="removeGetFile(file.id!,i)"></i>
+                        <div class="d-flex justify-content-center align-items-center" style="height: 140px;">
+                            <ng-container [ngSwitch]="file.fileType" class="files">
+                                <i *ngSwitchCase="'application/pdf'" class="fa-regular fa-file-pdf files"></i>
+                                <i *ngSwitchCase="'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'"
+                                    class="fa-regular fa-file-excel files"></i>
+                                <i *ngSwitchCase="'application/msword'" class="fa-regular fa-file-word files"></i>
+                                <img *ngSwitchCase="'image/apng'" class="fa-regular fa-file-word" [src]="file.filePath">
+                                <img *ngSwitchCase="'image/avif'" class="fa-regular fa-file-word" [src]="file.filePath">
+                                <img *ngSwitchCase="'image/gif'" class="fa-regular fa-file-word" [src]="file.filePath">
+                                <img *ngSwitchCase="'image/png'" class="fa-regular fa-file-word" [src]="file.filePath">
+                                <img *ngSwitchCase="'image/jpg'" class="fa-regular fa-file-word" [src]="file.filePath">
+                                <img *ngSwitchCase="'image/jpeg'" class="fa-regular fa-file-word" [src]="file.filePath">
+                                <img *ngSwitchCase="'image/svg'" class="fa-regular fa-file-word" [src]="file.filePath">
+                                <img *ngSwitchCase="'image/webp'" class="fa-regular fa-file-word" [src]="file.filePath">
+                                <img *ngSwitchDefault class="fa-regular fa-file files" [src]="file.fileName">
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div class="file-name ellipse">{{ file.fileName }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="m-0">
+    <div class="d-flex justify-content-end p-3" *ngIf="details.type!='View'">
+        <button type="button" class="btn btn-secondary mx-2" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">{{details.id?'Update':'Save'}}</button>
+    </div>
+</div>

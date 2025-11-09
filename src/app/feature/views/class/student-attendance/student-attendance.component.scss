@@ -1,0 +1,110 @@
+.form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.form-select:focus {
+  outline: none;
+  box-shadow: none; 
+}
+
+.btn-small{
+    border: none;
+    border-radius: 5px;
+    padding: 6px 15px;
+    margin-right: 8px;
+}
+
+.btn-present{
+    color: #8cf68c;
+    background-color: transparent;
+    border: 1px solid #8cf68c;
+}
+
+.btn-present-check{
+    color: white;
+    background-color: #8cf68c;
+    border: 1px solid #8cf68c;
+}
+
+.btn-leave{
+    color: #ffc864;
+    background-color: transparent;
+    border: 1px solid #ffc864;
+}
+
+.btn-leave-check{
+    color: white;
+    background-color: #ffc864;
+    border: 1px solid #ffc864;
+}
+
+.btn-absent{
+    color: #f63e3e;
+    background-color: transparent;
+    border: 1px solid #f63e3e;
+}
+
+.btn-absent-check{
+    color: white;
+    background-color: #f63e3e;
+    border: 1px solid #f63e3e;
+}
+
+.btn-holiday{
+    color: #a1a1f9;
+    background-color: transparent;
+    border: 1px solid #a1a1f9;
+}
+
+.btn-holiday-check{
+    color: white ;
+    background-color: #a1a1f9;
+    border: 1px solid #a1a1f9;
+}
+
+.form-control-sm:focus-visible{
+    outline: none;
+    box-shadow: none;
+}
+
+
+:focus {
+  outline: none;
+}
+
+.input-effect {
+  position: relative;
+}
+
+input[type="text"],
+select {
+  font: 15px/24px;
+  color: #333;
+  width: 100%;
+  background: transparent;
+  box-sizing: border-box;
+  letter-spacing: 1px;
+  font-family: Roboto, FontAwesome;
+}
+
+.border-effect {
+  border: 0;
+  padding: 7px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.border-effect~.focus-border {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #1b3e99;
+  transition: 0.4s;
+}
+
+.border-effect:focus~.focus-border {
+  width: 100%;
+  transition: 0.4s;
+}

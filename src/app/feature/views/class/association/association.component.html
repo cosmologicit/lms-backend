@@ -1,0 +1,122 @@
+<div class="d-flex justify-content-between px-3 my-2">
+    <p class="title">Class</p>
+    <button class="btn btn-primary" (click)="openAddClass()" *ngIf="role=='INSTITUTE_ADMIN'">
+        <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Class
+    </button>
+</div>
+<div class="card m-2 mt-3 p-4">
+    <div class="d-flex justify-content-between">
+        <div>
+            <!-- <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(ngModel)]="toggleValue">
+                <mat-button-toggle value="card">
+                    <mat-icon color="primary">dashboard</mat-icon>
+                </mat-button-toggle>
+                <mat-button-toggle value="table">
+                    <mat-icon color="primary">table_rows_narrow</mat-icon>
+                </mat-button-toggle>
+            </mat-button-toggle-group> -->
+        </div>
+        <div>
+            <div class="input-group flex-nowrap">
+                <span class="input-group-text">
+                    <i class="material-icons icon">search</i>
+                </span>
+                <input placeholder="Search Class" type="text" class="form-control" style="width: 350px;"
+                    [(ngModel)]="filterAssociationText" #searchAssociation="ngModel" name="searchAssociation"
+                    (keyup)="filterAssociation()">
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="toggleValue == 'card'" class="row mt-2 pb-3" style="max-height: 69vh; overflow: auto;">
+        <div class="col-3 my-2 px-4" *ngFor="let data of filteredAssociations">
+            <mat-card class="shadow mt-1">
+                <div class="img-download">
+                    <img mat-card-image class="w-100" [src]="'https://picsum.photos/200'" alt="image" height="135px">
+                    <a *ngIf="role=='INSTITUTE_ADMIN'">
+                        <button mat-icon-button title="Edit" (click)="editClass(data.id!)">
+                            <mat-icon style="color: #8472FC;">edit_square</mat-icon>
+                        </button>
+                        <button mat-icon-button title="Delete" (click)="deleteClass(data.id!)">
+                            <mat-icon style="color: #fa5757;">delete</mat-icon>
+                        </button>
+                    </a>
+                </div>
+
+                <div class="row mt-2 mb-4 ps-2">
+                    <div class="row">
+                        <div class="col-5">
+                            <span style="font-weight: 500;">Name</span>
+                        </div>
+                        <div class="col-6 ms-2">
+                            <div [title]="data.name" class="ellipse">{{data.name}}</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-5">
+                            <span style="font-weight: 500;">Code</span>
+                        </div>
+                        <div class="col-6 ms-2">
+                            <div [title]="data.code" class="ellipse">{{data.code}}</div>
+                        </div>
+                        <!-- <div class="col-8 d-flex justify-content-between" *ngIf="data.hodName!=null ">
+                            <select [(ngModel)]="data.hodName" class="form-select border-0" id="inputGroupSelect01"
+                                name="hodName" #hodName="ngModel">
+                                <option selected>{{data.hodName}}</option>
+                                <option *ngFor=" let teacher of teachers" [value]="teacher.id">
+                                    {{teacher.name}}</option>
+                            </select>
+                        </div> -->
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+
+
+
+    <div *ngIf="toggleValue == 'table'" class="row mt-4 px-3">
+        <ngx-datatable #dataTable class="material striped" [rows]="filteredAssociations" [headerHeight]="40"
+            [footerHeight]="50" rowHeight="auto" [columnMode]="ColumnMode.force" [count]="10">
+            <ngx-datatable-column name="#" [width]="70" [canAutoResize]="false">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ rowIndex + 1 }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Name" prop="name" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Class Teacher" prop="teacherName" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Code" prop="code" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Action" prop="id" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <div class="d-flex">
+                        <i class="fa-solid fa-link pointer" title="Link Students" (click)="linkUnlinkStudents(value)"
+                            title="Link Students" *ngIf="role=='INSTITUTE_ADMIN'"></i>
+                        <i class="fa fa-user ms-3 pointer"
+                            *ngIf="role=='INSTITUTE_ADMIN'||(row.isClassTeacher&& canTakeAttendance)" title="Attendance"
+                            (click)="attendence(value)"></i>
+                        <i class="fa-solid fa-pen-to-square pointer ms-3" style="color: #1b3e99;"
+                            (click)="editClass(value)" *ngIf="role=='INSTITUTE_ADMIN'"></i>
+                        <i class="fa fa-trash text-danger ms-3 pointer" (click)="deleteClass(value)"
+                            *ngIf="role=='INSTITUTE_ADMIN'"></i>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+</div>

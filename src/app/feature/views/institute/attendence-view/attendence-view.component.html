@@ -1,0 +1,77 @@
+<div style="max-height: 98vh;overflow: auto; ">
+    <ng-container *ngIf="viewDate">
+        <div class="d-flex justify-content-center align-items-center" [ngClass]="{'p-3':isOpenAsDialog==true}">
+            <div class="mini-calender">
+                <i class="fa-solid fa-chevron-left mx-1 pointer" title="Previous" (click)="previousMonth()"></i>
+                <i class="fa-solid fa-calendar-days mx-1"></i>
+                <i class="fa-solid fa-chevron-right mx-1 pointer" title="Next" (click)="nextMonth()"></i>
+            </div>
+            <span class="ms-2" style="font-size: 16px;color: black;font-weight: 500;">{{monthName}}</span>
+        </div>
+
+        <div class="card mt-2 mb-0">
+            <div class="p-3">
+                <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [cellTemplate]="cellTemplate">
+                    <ng-template #cellTemplate let-day="day">
+                        <div *ngIf="isSameMonth(day.date, viewDate)" class="calendar-day"
+                            (click)="onDayClick(day,$event)" [ngClass]="{ 'weekend-day': isWeekend(day.date)}">
+                            <div class="date-box p-1 ps-2" [ngClass]="{'today-date':isToday(day.date)}">{{ day.date |
+                                date:
+                                'd' }}</div>
+
+                            <!-- Display "Present" or "Not Present" for events -->
+                            <div *ngIf="day.events.length > 0; else noEvent">
+                                <div *ngFor="let event of day.events">
+                                    <div class="day-box"
+                                        [ngClass]="{'present-box':event.status=='PRESENT','absent-box':event.status=='ABSENT',
+                                    'holiday-box':event.status=='HOLIDAY','half-day':event.status=='HALFDAY','leave-box':event.status=='LEAVE'}">
+                                        <span *ngIf="event.status=='ABSENT'">Absent</span>
+                                        <div *ngIf="event.status=='PRESENT'">
+                                            <span>Present</span>
+                                            <div class="d-flex justify-content-center"
+                                                *ngIf="role!='STUDENT' && details?.type!='STUDENT'">
+                                                {{formatTime(event.workingHours)}}
+                                            </div>
+                                        </div>
+                                        <div *ngIf="event.status=='HALFDAY'">
+                                            <span>Half Day</span>
+                                            <div class="d-flex justify-content-center"
+                                                *ngIf="role!='STUDENT' && details?.type!='STUDENT'">
+                                                {{formatTime(event.workingHours)}}
+                                            </div>
+                                        </div>
+                                        <div *ngIf="event.status=='LEAVE'">
+                                            <span>Leave</span>
+                                        </div>
+                                        <span
+                                            *ngIf="event.status=='HOLIDAY'">{{event.holidayName?event.holidayName:'Holiday'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- If no event is present -->
+                            <ng-template #noEvent>
+                                <div></div>
+                            </ng-template>
+                        </div>
+                    </ng-template>
+                </mwl-calendar-month-view>
+                <div class="my-2 px-3">
+                    <button class="btn btn-present">
+                        P : <span class="text-secondary">{{totalPresent}}</span>
+                    </button>
+                    <button class="btn btn-absent mx-3">
+                        A : <span class="text-secondary">{{totalAbsent}}</span>
+                    </button>
+                    <button class="btn btn-leave">
+                        L : <span class="text-secondary">{{totalPresent}}</span>
+                    </button>
+                    <button class="btn btn-holiday ms-3">
+                        H : <span class="text-secondary">{{totalHoliday}}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </ng-container>
+</div>

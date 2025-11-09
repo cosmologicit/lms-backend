@@ -1,0 +1,67 @@
+<div class="card mb-0">
+    <div class="p-3 d-flex justify-content-between align-items-center">
+        <span class="title">{{status}} Book</span>
+        <i class="fa-regular fa-x"></i>
+    </div>
+    <hr class="m-0">
+    <form #bookForm="ngForm">
+        <div class="p-3">
+            <div class="row">
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Name*</label>
+                    <input type="text" class="form-control" name="name" [(ngModel)]="data.name" #name="ngModel" required
+                        [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                    <p *ngIf="name.touched && name.errors && name.errors['required']" class="validation-error ">
+                        Name is required
+                    </p>
+                </div>
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Book Number</label>
+                    <input type="text" class="form-control" name="bookNo" [(ngModel)]="data.bookNo" #bookNo="ngModel">
+                </div>
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Publisher</label>
+                    <input type="text" class="form-control" name="publisher" [(ngModel)]="data.publisher"
+                        #publisher="ngModel">
+                </div>
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Author</label>
+                    <input type="text" class="form-control" name="author" [(ngModel)]="data.author" #author="ngModel">
+                </div>
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Rack Number</label>
+                    <input type="text" class="form-control" name="rackNo" [(ngModel)]="data.rackNo" #rackNo="ngModel">
+                </div>
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Quantity</label>
+                    <input type="text" class="form-control" name="quantity" [(ngModel)]="data.quantity"
+                        #quantity="ngModel">
+                </div>
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Available</label>
+                    <input type="text" class="form-control" name="available" [(ngModel)]="data.available"
+                        #available="ngModel">
+                </div>
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Price</label>
+                    <input type="number" class="form-control" name="price" [(ngModel)]="data.price" #price="ngModel">
+                </div>
+                <div class="form-field mt-2 col-6">
+                    <label class="label">Post Date</label>
+                    <input type="date" class="form-control" name="postDate" [(ngModel)]="data.postDate"
+                        #postDate="ngModel">
+                </div>
+                <!-- <div class="form-field mt-2 col-6">
+                            <label class="label">Price</label>
+                            <input type="number" class="form-control" name="postDate" [(ngModel)]="data.postDate"
+                                #postDate="ngModel">
+                        </div> -->
+            </div>
+        </div>
+    </form>
+    <hr class="m-0">
+    <div class="p-3 d-flex justify-content-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">{{status=='Add'?'Save':'Update'}}</button>
+    </div>
+</div>

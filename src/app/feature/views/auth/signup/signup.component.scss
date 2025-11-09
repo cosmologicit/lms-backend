@@ -1,0 +1,15 @@
+@media only screen and (max-width: 420px) {
+    .main-box{
+    display: block;
+    height: 50vh;
+    margin: 1px 10px 0px 10px;
+    margin-top: 9vh;
+  }
+}
+
+.login-left-box{
+    background-image: url(../../../../../assets/images/login.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 8px 0px 0px 8px;
+}

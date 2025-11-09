@@ -1,0 +1,99 @@
+<div class="p-3">
+    <span class="title">Student Attendance</span>
+</div>
+<div class="card shadow-sm mb-0">
+    <div class="p-3">
+        <div class="d-flex justify-content-between">
+            <div class="d-flex">
+                <div class="form-field me-3" style="width: 200px;">
+                    <label class="label">Date</label>
+                    <input type="date" class="form-control" [max]="todayDate" [(ngModel)]="attendanceDate" name="date"
+                        (change)="getAttendance()">
+                </div>
+                <div class="form-field" style="width: 200px;" *ngIf="role=='INSTITUTE_ADMIN'">
+                    <label class="label">Class</label>
+                    <select class="form-select" [(ngModel)]="selectedAssociationId" name="class"
+                        (change)="getAttendance()">
+                        <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div>
+                <div class="form-field me-3" style="width: 250px;"
+                    *ngIf="students.studentAttendanceResponseList!.length>0">
+                    <label class="label">Mark All As</label>
+                    <select class="form-select w-100" name="mark" [(ngModel)]="markAllAs" (change)="markAll()">
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                        <option value="Leave">Leave</option>
+                        <option value="Holiday">Holiday</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        <div style="max-height: 51vh;min-height: 51vh;overflow: auto;">
+            <ngx-datatable #dataTable class="material striped" [rows]="students.studentAttendanceResponseList"
+                [headerHeight]="40" [footerHeight]="50" rowHeight="auto" [columnMode]="ColumnMode.force" [count]="10">
+                <ngx-datatable-column name="#" [width]="70" [canAutoResize]="false">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                        <span>{{ rowIndex + 1 }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Name" prop="studentName" [width]="100">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                        <span class="ellipse" [title]="value">{{ value }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Email" prop="email" [width]="200">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                        <span class="ellipse" [title]="value">{{ value }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Phone" prop="phone" [width]="100">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                        <span class="ellipse" [title]="value">{{ value }}</span>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Action" prop="id" [width]="200">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                        <div>
+                            <button class="btn-small"
+                                (click)="row.isPresent=!row.isPresent; row.isAbsent=false; row.isLeave=false; row.isHoliday=false"
+                                [ngClass]="row.isPresent?'btn-present-check':'btn-present'">P</button>
+                            <button class="btn-small"
+                                (click)="row.isAbsent=!row.isAbsent; row.isPresent=false ; row.isLeave=false ;row.isHoliday=false"
+                                [ngClass]="row.isAbsent?'btn-absent-check':'btn-absent'">A</button>
+                            <button class="btn-small"
+                                (click)="row.isLeave=!row.isLeave ; row.isPresent=false ; row.isAbsent=false ; row.isHoliday=false"
+                                [ngClass]="row.isLeave?'btn-leave-check':'btn-leave'">L</button>
+                            <button class="btn-small"
+                                (click)="row.isHoliday=!row.isHoliday ; row.isPresent=false ; row.isAbsent=false ; row.isLeave=false"
+                                [ngClass]="row.isHoliday?'btn-holiday-check':'btn-holiday'">H</button>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Remark" prop="comment" [width]="200">
+                    <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                        <div class="input-effect">
+                            <input class="border-effect" type="text" placeholder="Remark" [(ngModel)]="row.comment"
+                                name="comment">
+                            <span class="focus-border"></span>
+                        </div>
+                    </ng-template>
+                </ngx-datatable-column>
+            </ngx-datatable>
+        </div>
+    </div>
+    <hr class="m-0">
+    <div class="d-flex justify-content-end p-3">
+        <button class="btn btn-primary" (click)="onSubmit()">{{isUpdate?'Update':'Save'}}</button>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+<div class="card mb-0">
+    <div>
+        <div class="d-flex justify-content-between p-3">
+            <div>
+                <p class="title">Department</p>
+            </div>
+            <div>
+                <button class="btn btn-primary" (click)="openAddDepartment()">Add</button>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between px-3 py-1">
+            <div>
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" [(ngModel)]="toggleValue">
+                    <mat-button-toggle value="card">
+                        <mat-icon color="primary">dashboard</mat-icon>
+                    </mat-button-toggle>
+                    <mat-button-toggle value="table">
+                        <mat-icon color="primary">table_rows_narrow</mat-icon>
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
+            <div>
+                <div class="input-group flex-nowrap" style="max-width: 300px;">
+                    <span class="input-group-text">
+                        <i class="material-icons icon">search</i>
+                    </span>
+                    <input placeholder="Search Department" type="text" class="form-control" style="width: 230px;"
+                        [(ngModel)]="searchDepartmentText" #searchDepartment="ngModel" name="searchDepartment">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="toggleValue == 'card'" class="row mt-2 pb-3" style="max-height: 69vh; overflow: auto;">
+        <div class="col-3 my-2 px-4" *ngFor="let data of departments">
+            <mat-card class="shadow mt-1">
+                <div class="img-download">
+                    <img mat-card-image class="w-100" [src]="'https://picsum.photos/200'" alt="image" height="135px">
+                    <a>
+                        <button mat-icon-button title="Edit" (click)="editDepartment(data.id!)">
+                            <mat-icon style="color: #8472FC;">edit_square</mat-icon>
+                        </button>
+                        <button mat-icon-button title="Delete" (click)="deleteDepartment(data.id!)">
+                            <mat-icon style="color: #fa5757;">delete</mat-icon>
+                        </button>
+                    </a>
+                </div>
+
+                <div class="row mt-2 mb-4 ps-2">
+                    <div class="row">
+                        <div class="col-5">
+                            <span style="font-weight: 500;">Department</span>
+                        </div>
+                        <div class="col-6 ms-2">
+                            <div [title]="data.name" class="ellipse">{{data.name}}</div>
+                        </div>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-5">
+                            <span style="font-weight: 500;">Code</span>
+                        </div>
+                        <div class="col-6 ms-2">
+                            <div [title]="data.code" class="ellipse">{{data.code}}</div>
+                        </div>
+                        <!-- <div class="col-8 d-flex justify-content-between" *ngIf="data.hodName!=null ">
+                            <select [(ngModel)]="data.hodName" class="form-select border-0" id="inputGroupSelect01"
+                                name="hodName" #hodName="ngModel">
+                                <option selected>{{data.hodName}}</option>
+                                <option *ngFor=" let teacher of teachers" [value]="teacher.id">
+                                    {{teacher.name}}</option>
+                            </select>
+                        </div> -->
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+
+    <div *ngIf="toggleValue == 'table'" class="row mt-2">
+        <div class="px-4">
+            <div class="mat-elevation-z8 shadow-sm">
+                <table mat-table [dataSource]="dataSource">
+
+                    <ng-container matColumnDef="sno">
+                        <th mat-header-cell *matHeaderCellDef class="py-3"> # </th>
+                        <td mat-cell *matCellDef="let element;let idx=index" class="py-3">{{getSerialNumber(idx)}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef> Name </th>
+                        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="hod">
+                        <th mat-header-cell *matHeaderCellDef> HOD </th>
+                        <td mat-cell *matCellDef="let element"> {{element.hodId}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="code">
+                        <th mat-header-cell *matHeaderCellDef> Code </th>
+                        <td mat-cell *matCellDef="let element"> {{element.code}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef class="text-end p-4">Action</th>
+                        <td mat-cell *matCellDef="let element">
+                            <div class="actions">
+                                <div class="d-flex align-items-center justify-content-end">
+                                    <button mat-icon-button title="Edit" (click)="editDepartment(element.id)">
+                                        <mat-icon style="color: #8472FC; font-size: 20px;">edit_square</mat-icon>
+                                    </button>
+                                    <button mat-icon-button title="Delete" (click)="deleteDepartment(element.id)">
+                                        <mat-icon style="color: #fa5757;font-size: 20px;">delete</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>

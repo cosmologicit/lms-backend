@@ -1,0 +1,126 @@
+<div class="colored-background">
+    <div class="main-box">
+        <div class="row m-0">
+            <div>
+                <div class=" row border shadow login-box p-0" style="max-height: 98vh;overflow: auto;">
+                    <div class="col-lg-6 d-none d-lg-block p-0 login-left-box" style="background-color: blue;">
+                        <!-- <img class="img-fluid" style="object-fit: contain;" src="../../../../../assets/images/login.png"> -->
+                    </div>
+                    <div class="col-lg-6 col-sm-12 bg-white login-right-box">
+                        <div class="d-flex align-items-center px-1" style="max-height: 15vh; min-height: 15vh;">
+                            <div>
+                                <span style="font-size: 3.7vh; color: gray;">Empower your institute with LMS</span><br>
+                                <span>Get Started with your institute online leraning platform</span>
+                            </div>
+                        </div>
+                        <div class="px-1">
+                            <div>
+                                <span style="font-size: 3.3vh; color: gray;">Sign Up</span>
+                            </div>
+                            <form #signUpForm="ngForm" (ngSubmit)="onSubmit()">
+                                <div>
+                                    <div class="form-field mt-4">
+                                        <label class="label">Name*</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.name" name="name"
+                                            #name="ngModel" required
+                                            [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                                        <p *ngIf="name.touched && name.errors && name.errors['required']"
+                                            class="validation-error">
+                                            Name is Required
+                                        </p>
+                                    </div>
+
+                                    <div class="form-field mt-4">
+                                        <label class="label">Email*</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.email" name="email"
+                                            #email="ngModel" pattern="[a-zA-Z0-9.+_-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,4}"
+                                            required
+                                            [ngClass]="{'is-invalid':email.touched && email.errors && email.errors['required']}">
+                                        <p *ngIf="email.touched && email.errors && email.errors['required']"
+                                            class="validation-error ">
+                                            Email is required
+                                        </p>
+                                        <p *ngIf="email.invalid && (email.dirty || email.touched) && data?.email && data.email!.length>0 "
+                                            class="validation-error ms-2">
+                                            Enter a valid email
+                                        </p>
+                                    </div>
+
+                                    <div class="form-field mt-4">
+                                        <label class="label">Phone*</label>
+                                        <input type="text" class="form-control" [(ngModel)]="data.phone" name="phone"
+                                            #phone="ngModel" required
+                                            [ngClass]="{'is-invalid':phone.touched && phone.errors && phone.errors['required']}">
+                                        <p *ngIf="phone.touched && phone.errors && phone.errors['required']"
+                                            class="validation-error ">
+                                            Phone number is required
+                                        </p>
+                                    </div>
+
+                                    <div class="form-field mt-4">
+                                        <label class="label">Password*</label>
+                                        <input type="{{isPasswordVisible?'text':'password'}}" class="form-control"
+                                            [(ngModel)]="data.password" name="checkpassword" #checkpassword="ngModel"
+                                            required
+                                            [ngClass]="{'is-invalid':checkpassword.touched && checkpassword.errors && checkpassword.errors['required']}">
+                                        <i *ngIf="isPasswordVisible" (click)="isPasswordVisible=false"
+                                            class="fa-regular fa-eye input-icons"></i>
+                                        <i *ngIf="!isPasswordVisible" (click)="isPasswordVisible=true"
+                                            class="fa-regular fa-eye-slash input-icons"></i>
+                                        <p *ngIf="checkpassword.touched && checkpassword.errors && checkpassword.errors['required']"
+                                            class="validation-error ">
+                                            Password is required
+                                        </p>
+                                        <p *ngIf="!isMaxErrorPasswordVisible()" class="validation-error ms-2">
+                                            Password must have 8 characters
+                                        </p>
+                                    </div>
+
+                                    <div class="form-field mt-4">
+                                        <label class="label">Confirm Password*</label>
+                                        <input type="{{isConfirmPasswordVisible?'text':'password'}}"
+                                            class="form-control" [(ngModel)]="password" name="confirmpassword"
+                                            #confirmpassword="ngModel" required
+                                            [ngClass]="{'is-invalid':confirmpassword.touched && confirmpassword.errors && confirmpassword.errors['required']}">
+                                        <i *ngIf="isConfirmPasswordVisible" (click)="isConfirmPasswordVisible=false"
+                                            class="fa-regular fa-eye input-icons"></i>
+                                        <i *ngIf="!isConfirmPasswordVisible" (click)="isConfirmPasswordVisible=true"
+                                            class="fa-regular fa-eye-slash input-icons"></i>
+
+                                        <p *ngIf="confirmpassword.touched && confirmpassword.errors && confirmpassword.errors['required']"
+                                            class="validation-error">
+                                            Password is required
+                                        </p>
+                                        <p *ngIf="password!=data.password && password!.length>0 "
+                                            class="validation-error ms-2">
+                                            <i class="fa-solid fa-circle-exclamation me-2"></i>
+                                            <span style="font-size: small;">Password does not match</span>
+                                        </p>
+                                        <span
+                                            *ngIf="password==data.password && data.password!.length>0 && password.length>=8">
+                                            <span style="color: rgb(62, 179, 62);" class="ms-2 validation-error">
+                                                <i class="fa-solid fa-check me-2"></i>
+                                                <span style="font-size: small;">Password Match</span>
+                                            </span>
+                                        </span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between mt-3">
+                                        <div style="color: gray;">Already have an account?
+                                            <span class="pointer" style="color: rgba(78, 78, 239, 0.625);"
+                                                [routerLink]="'/auth/login'">Log
+                                                In </span>
+                                        </div>
+                                    </div>
+                                    <div class="my-4">
+                                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

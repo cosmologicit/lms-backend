@@ -1,0 +1,57 @@
+<div class="colored-background">
+    <div class="main-box">
+        <div class="row m-0">
+            <div>
+                <div class=" row border shadow delete-acc-box p-0">
+                    <div class="bg-white">
+                        <div class="px-1 pt-2">
+                            <div>
+                                <span style="font-size: 3.3vh; color: gray;">Delete Account</span>
+                            </div>
+                            <form #deleteAccountForm="ngForm" (ngSubmit)="onSubmit()">
+                                <div>
+                                    <div class="form-field mt-4">
+                                        <label class="label">Your Full Name*</label>
+                                        <input type="text" class="form-control" name="fullName" [(ngModel)]="user.name"
+                                            #fullName="ngModel" required
+                                            [ngClass]="{'is-invalid':fullName.touched && fullName.errors && fullName.errors['required']}">
+                                        <p *ngIf="fullName.touched && fullName.errors && fullName.errors['required']"
+                                            class="validation-error ">
+                                            Full Name is required
+                                        </p>
+                                    </div>
+
+                                    <div class="form-field mt-4">
+                                        <label class="label">Your email*</label>
+                                        <input type="text" class="form-control" name="email" [(ngModel)]="user.email"
+                                            #email="ngModel" required
+                                            [ngClass]="{'is-invalid':email.touched && email.errors && email.errors['required']}">
+                                        <p *ngIf="email.touched && email.errors && email.errors['required']"
+                                            class="validation-error ">
+                                            Email is required
+                                        </p>
+                                    </div>
+
+                                    <div class="form-field mt-4 pb-0">
+                                        <label class="label">Reason to delete the account*</label>
+                                        <textarea type="text" class="form-control h-100" [(ngModel)]="user.reason"
+                                            #reason="ngModel" rows="2" name="reason" required
+                                            [ngClass]="{'is-invalid':reason.touched && reason.errors && reason.errors['required']}"></textarea>
+                                    </div>
+                                    <p *ngIf="reason.touched && reason.errors && reason.errors['required']"
+                                        class="validation-error ">
+                                        Reason is required
+                                    </p>
+
+                                    <div class="my-4">
+                                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

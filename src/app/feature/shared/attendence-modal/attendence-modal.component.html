@@ -1,0 +1,52 @@
+<div class="card mb-0">
+    <div class="p-3 d-flex justify-content-between align-items-center">
+        <span class="title">Attendance</span>
+        <div class="d-flex align-items-center">
+            <div class="d-flex justify-content-end me-3">
+                <input type="checkbox" id="select" class="me-2 mb-1 pointer" [(ngModel)]="isSelectAll" name="check"
+                    (change)="checkAll()" style="align-self: flex-end"><span for="select">{{selectUnselectText}}</span>
+            </div>
+            <i class="fa-regular fa-x pointer" (click)="close()"></i>
+        </div>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        <ngx-datatable #dataTable class="material striped" [rows]="students" [headerHeight]="40" [footerHeight]="50"
+            rowHeight="auto" [columnMode]="ColumnMode.force" [count]="10">
+            <ngx-datatable-column name="#" [width]="70" [canAutoResize]="false">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ rowIndex + 1 }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Name" prop="name" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Email" prop="email" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Phone" prop="phone" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Action" prop="isPresent" [width]="200">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <input type="checkbox" [(ngModel)]="row.isPresent">
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </div>
+    <hr class="m-0" *ngIf="status!='View'">
+    <div class="p-3 d-flex justify-content-end" *ngIf="status!='View'">
+        <button class="btn btn-secondary me-3" (click)="close()">Cancel</button>
+        <button class="btn btn-primary" (click)="onSubmit()">Save {{status}}</button>
+    </div>
+</div>

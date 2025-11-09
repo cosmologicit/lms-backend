@@ -1,0 +1,58 @@
+.validation-error {
+    position: absolute;
+}
+
+.linked-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    border: 1px rgb(192, 180, 180);
+    border-style: solid;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.menu {
+    position: absolute;
+    bottom: 45%;
+    z-index: 99;
+}
+
+.drop-down {
+    background-color: white;
+    border: solid;
+    border-width: 1px;
+    border-radius: 6px;
+}
+
+.drop-down-field {
+    display: block;
+    width: 100%;
+    padding: 7px 15px 7px 10px;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+::ng-deep .mat-mdc-select-arrow {
+    opacity: 0;
+}
+
+::ng-deep .mat-mdc-select {
+    padding: 12px 10px 10px 0px;
+}
+
+::ng-deep .mat-mdc-select-trigger {
+    cursor: default;
+    padding-left: 10px;
+}

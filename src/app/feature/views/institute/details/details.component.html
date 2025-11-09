@@ -1,0 +1,133 @@
+<div class="card">
+    <div class="title p-3">
+        <span>Institute Details</span>
+    </div>
+    <hr class="m-0">
+    <div class="px-3">
+        <form #detailsForm="ngForm">
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">Name*</label>
+                        <input type="text" class="form-control" name="name" [(ngModel)]="data.name" #name="ngModel"
+                            required [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                        <p *ngIf="name.touched && name.errors && name.errors['required']" class="validation-error ">
+                            Name is required
+                        </p>
+                    </div>
+                    <div class="form-field mt-4">
+                        <label class="label">Contact Number</label>
+                        <input type="text" class="form-control" name="number" [(ngModel)]="data.phone" #phone="ngModel">
+                    </div>
+                    <div class="form-field mt-4">
+                        <label class="label">Email</label>
+                        <input type="text" class="form-control" name="email" [(ngModel)]="data.email" #email="ngModel">
+                    </div>
+                </div>
+                <div class="col-3 d-flex  flex-column mt-4" *ngIf="isInstituteSave">
+                    <div>
+                        <input type="file" hidden id="logo" name="logo" accept="imaage/*"
+                            (change)="onLogoChange($event)">
+                        <img *ngIf="hasLogo" [src]="data.logoUrl" alt="logo"
+                            style="max-height: 180px;    max-width: 300px;">
+                        <button *ngIf="!hasLogo" class="btn btn-primary" (click)="addLogo('logo')">Add Logo</button>
+                    </div>
+                </div>
+                <div class="col-3 mt-4 ps-4 d-flex flex-column" *ngIf="isInstituteSave">
+                    <div class="row p-0 m-0">
+                        <div class="col-12" *ngIf="hasLogo">
+                            <button type="button" class="btn btn-outline-primary logo-action" (click)="addLogo('logo')">
+                                Edit Logo
+                            </button>
+                        </div>
+                        <div class="col-12 mt-4" *ngIf="hasLogo">
+                            <button type="button" class="btn btn-outline-danger logo-action" (click)="removeLogo()">
+                                Remove Logo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">Code</label>
+                        <input type="text" class="form-control" name="code" [(ngModel)]="data.code" #code="ngModel">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">Website</label>
+                        <input type="text" class="form-control" name="Wwbsite" [(ngModel)]="data.website"
+                            #website="ngModel">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">Affiliation</label>
+                        <input type="text" class="form-control" name="affiliation" [(ngModel)]="data.affiliation"
+                            #affiliation="ngModel">
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">Accrediation Status</label>
+                        <input type="text" class="form-control" name="status" [(ngModel)]="data.accreditationStatus"
+                            #status="ngModel">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">Description</label>
+                        <textarea rows="3" type="text" class="form-control" style="height: 100%;" name="description"
+                            [(ngModel)]="data.description" #description="ngModel"></textarea>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">Session</label>
+                        <select class="form-select" name="session" [(ngModel)]="data.session" #session="ngModel">
+                            <option *ngFor="let date of dateRanges">{{date}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">Start Time</label>
+                        <input [ngxTimepicker]="picker" class="form-control" [(ngModel)]="data.startTiming"
+                            #startTiming="ngModel" name="startTiming" readonly
+                            (ngModelChange)="formatTime(data.startTiming!)">
+                        <ngx-material-timepicker #picker></ngx-material-timepicker>
+                    </div>
+                </div>
+                <div class="col-3">
+                    <div class="form-field mt-4">
+                        <label class="label">End Time</label>
+                        <input [ngxTimepicker]="endPicker" class="form-control" [(ngModel)]="data.endTiming"
+                            #endTiming="ngModel" name="endTiming" [min]="data.startTiming!" readonly
+                            [disabled]="data.startTiming==undefined||data.startTiming==null"
+                            (ngModelChange)="formatEndTime(data.endTiming!)">
+                        <ngx-material-timepicker #endPicker></ngx-material-timepicker>
+                    </div>
+                </div>
+                <div class="col-3" *ngIf="data.id">
+                    <div class="form-field mt-4">
+                        <label class="label">Working Days</label>
+                        <mat-select class="form-select" name="item" [(ngModel)]="workingDays" multiple>
+                            <div class="drop-down">
+                                <mat-option *ngFor="let day of days"
+                                    [value]="day.dayOfWeek">{{day.dayOfWeek}}</mat-option>
+                            </div>
+                        </mat-select>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr class="mb-0">
+    <div class="d-flex justify-content-end p-3">
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">{{data.id?'Update':'Save'}}</button>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+.profile-img {
+  height: 30px;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  object-fit: contain;
+  margin-right: 5px;
+}
+
+.form-control:focus {
+  outline: none;
+  box-shadow: none;
+}

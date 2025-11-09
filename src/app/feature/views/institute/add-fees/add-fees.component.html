@@ -1,0 +1,108 @@
+<div>
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <span class="title">{{status}} Fees</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        <form #feeForm="ngForm">
+            <div class="row">
+                <div class="col-4">
+                    <div class="form-field mt-2">
+                        <label class="label">Class*</label>
+                        <select type="text" class="form-select" name="name" [(ngModel)]="data.associationId"
+                            #name="ngModel" required
+                            [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                            <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                        </select>
+                        <p *ngIf="name.touched && name.errors && name.errors['required']" class="validation-error">
+                            Class is required
+                        </p>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-2">
+                        <label class="label">Examination Fee</label>
+                        <input type="number" class="form-control" name="examinationFee"
+                            [(ngModel)]="data.examinationFee" #examinationFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-2">
+                        <label class="label">Library Fee</label>
+                        <input type="number" class="form-control" name="libraryFee" [(ngModel)]="data.libraryFee"
+                            #libraryFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Admission Fee</label>
+                        <input type="number" class="form-control" name="admissionFee" [(ngModel)]="data.admissionFee"
+                            #admissionFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Activity Fee</label>
+                        <input type="number" class="form-control" name="activityFee" [(ngModel)]="data.activityFee"
+                            #activityFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Computer Fee</label>
+                        <input type="number" class="form-control" name="computerFee" [(ngModel)]="data.computerFee"
+                            #computerFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Hostel Fee</label>
+                        <input type="number" class="form-control" name="hostelFee" [(ngModel)]="data.hostelFee"
+                            #hostelFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Tuition Fee</label>
+                        <input type="number" class="form-control" name="tuitionFee" [(ngModel)]="data.tuitionFee"
+                            #tuitionFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Transport Fee</label>
+                        <input type="number" class="form-control" name="transportFee" [(ngModel)]="data.transportFee"
+                            #transportFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Dues Fee</label>
+                        <input type="number" class="form-control" name="duesFee" [(ngModel)]="data.duesFee"
+                            #duesFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Other Fee</label>
+                        <input type="number" class="form-control" name="otherFee" [(ngModel)]="data.otherFee"
+                            #otherFee="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-3">
+                        <label class="label">Academic Year</label>
+                        <input type="text" class="form-control" name="academicYear" [(ngModel)]="data.academicYear"
+                            #academicYear="ngModel">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr class="m-0">
+    <div class="d-flex justify-content-end p-3">
+        <button type="button" class="btn btn-secondary me-2" (click)="close()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">{{status=='Add'?'Update':'Save'}}</button>
+    </div>
+</div>

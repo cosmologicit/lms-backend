@@ -1,0 +1,140 @@
+<div class="d-flex justify-content-between px-3 my-2">
+    <p class="title">Exam</p>
+    <button class="btn btn-primary" [routerLink]="'/app/class/exam/add'">
+        <i class="fa fa-plus-circle"></i>&nbsp;&nbsp;Add Exam
+    </button>
+</div>
+<div class="card m-2 mt-3 p-4">
+    <div class="d-flex justify-content-end align-items-center  w-100">
+        <div style="width: 200px;" class="mt-2" *ngIf="role!='STUDENT'">
+            <div class="form-field">
+                <label class="label">Classes</label>
+                <select class="form-select w-100" name="class" [(ngModel)]="selectedClass" (change)="filterExam()"
+                    #class="ngModel">
+                    <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div style="width: 200px;" class="mt-2 mx-3">
+            <div class="form-field">
+                <label class="label">Subjects</label>
+                <select class="form-select w-100" name="subject" (change)="filterExam()" [(ngModel)]="selectedSubject"
+                    #subject="ngModel">
+                    <option *ngFor="let subject of subjects" [value]="subject.id">{{subject.name}}</option>
+                </select>
+            </div>
+        </div>
+        <div style="width: 200px;" class="mt-2">
+            <div class="form-field">
+                <label class="label">Exam Type</label>
+                <select class="form-select w-100" name="subject" (change)="filterExam()" [(ngModel)]="selectedExamType"
+                    #subject="ngModel">
+                    <option value="ALL">All</option>
+                    <option value="WEEKLY_TEST">Weekly Test</option>
+                    <option value="UNIT_TEST">Unit Test</option>
+                    <option value="HALF_YEARLY">Half Yearly</option>
+                    <option value="ANNUAL_EXAMS">Annual Exams</option>
+                    <option value="OTHER">Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="input-group flex-nowrap ms-3" style="max-width: 350px;">
+            <span class="input-group-text">
+                <i class="material-icons icon">search</i>
+            </span>
+            <input placeholder="Search" type="text" class="form-control" [(ngModel)]="filterExamtext"
+                #searchFee="ngModel" name="searchFee" (keyup)="filterExam()">
+        </div>
+    </div>
+
+
+    <div class="mt-4" style="max-width: 78vw;overflow: auto;">
+        <ngx-datatable #dataTable class="material striped" [rows]="filteredExam" [headerHeight]="40" [footerHeight]="50"
+            rowHeight="auto" [columnMode]="ColumnMode.force" [count]="10" [scrollbarH]="true">
+            <ngx-datatable-column name="#" [width]="70" [canAutoResize]="false">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ rowIndex + 1 }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Action" prop="id" [width]="150" *ngIf="role!='STUDENT'">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <div class="d-flex">
+                        <i class="fa-solid fa-user pointer ms-3"
+                            [routerLink]="'/app/class/exam/check/'+row.name+'/'+value +'/'+row.associationId+'/'+row.date"></i>
+                        <i class="fa-solid fa-pen-to-square pointer ms-3" style="color: #1b3e99;"
+                            [routerLink]="'/app/class/exam/edit/'+value" *ngIf="checkDate(row.date)"></i>
+                        <i class="fa fa-trash text-danger ms-3 pointer" (click)="deleteExam(value)"></i>
+                    </div>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Name" prop="name" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Class" prop="associationName" [width]="150" *ngIf="role!='STUDENT'">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Subject" prop="subjectName" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Type" prop="examType" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span *ngIf="value=='WEEKLY_TEST'">Weekly Test</span>
+                    <span *ngIf="value=='UNIT_TEST'">Unit Test</span>
+                    <span *ngIf="value=='HALF_YEARLY'">Half Yearly</span>
+                    <span *ngIf="value=='ANNUAL_EXAMS'">Annual Exams</span>
+                    <span *ngIf="value=='OTHER'">other</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Date" prop="date" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value |date:'dd-MM-yyyy'}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Max. Marks" prop="maxMarks" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Passing Marks" prop="passingMarks" [width]="150">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Obtained Marks" prop="obtainedMarks" [width]="150" *ngIf="role=='STUDENT'">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Grade" prop="grade" [width]="150" *ngIf="role=='STUDENT'">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Status" prop="examStatus" [width]="150" *ngIf="role=='STUDENT'">
+                <ng-template ngx-datatable-cell-template let-rowIndex="rowIndex" let-value="value" let-row="row">
+                    <span>{{ value }}</span>
+                </ng-template>
+            </ngx-datatable-column>
+
+
+        </ngx-datatable>
+    </div>
+</div>

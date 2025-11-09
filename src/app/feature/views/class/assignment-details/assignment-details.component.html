@@ -1,0 +1,84 @@
+<div class="card mb-0" style="max-height: 95vh;overflow: auto; ">
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <span class="title">Assignment Details</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <form #assignmentForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="p-3">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-field">
+                        <label class="label">Title</label>
+                        <input type="text" class="form-control" name="title" [(ngModel)]="data.title" #title="ngModel"
+                            required
+                            [ngClass]="{'is-invalid':title.touched && title.errors && title.errors['required']}">
+                        <p *ngIf="title.touched && title.errors && title.errors['required']" class="validation-error ">
+                            Title is required
+                        </p>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field">
+                        <label class="label">Start Date</label>
+                        <input type="date" class="form-control" name="startDate" [(ngModel)]="data.startDate"
+                            #startDate="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">End date</label>
+                        <input type="date" class="form-control" name="endDate" [(ngModel)]="data.endDate"
+                            #endDate="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Time</label>
+                        <input type="time" class="form-control" name="time" [(ngModel)]="data.time" #time="ngModel">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Class</label>
+                        <select name="association" class="form-select" [(ngModel)]="data.associationId"
+                            (change)="filterSubjects()" #association="ngModel">
+                            <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6" *ngIf="data.associationId && filterSubjects.length>0">
+                    <div class="form-field mt-4">
+                        <label class="label">Subject</label>
+                        <select name="subject" class="form-select" [(ngModel)]="data.subjectId"
+                            (change)="filterChapters()" #subject="ngModel">
+                            <option *ngFor="let subject of filteredSubjects" [value]="subject.id">{{subject.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6" *ngIf="data.subjectId && filteredChapters.length>0">
+                    <div class="form-field mt-4">
+                        <label class="label">Chapter</label>
+                        <select name="chapter" class="form-select" [(ngModel)]="data.chapterId" #chapter="ngModel">
+                            <option *ngFor="let chapter of filteredChapters" [value]="chapter.id">{{chapter.name}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-field mt-4">
+                        <label class="label">Description</label>
+                        <textarea type="time" class="form-control" name="description" [(ngModel)]="data.description"
+                            #descriptions="ngModel"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="m-0">
+        <div class="d-flex justify-content-end p-3">
+            <button type="button" class="btn btn-secondary me-2" (click)="close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>

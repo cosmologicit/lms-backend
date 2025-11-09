@@ -1,0 +1,246 @@
+<div class="title p-3">
+    <span>{{status}} Teacher</span>
+</div>
+<div class="card mb-0 shadow-sm">
+    <form #teacherForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="p-3">
+            <div class="row">
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-field mt-4">
+                                <label class="label">Name</label>
+                                <input type="text" class="form-control" name="name" [(ngModel)]="data.name"
+                                    #name="ngModel" required
+                                    [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                                <p *ngIf="name.touched && name.errors && name.errors['required']"
+                                    class="validation-error">
+                                    Name is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-field mt-4">
+                                <label class="label">Phone</label>
+                                <input type="number" class="form-control" name="phone" [(ngModel)]="data.phone"
+                                    #phone="ngModel" required
+                                    [ngClass]="{'is-invalid':phone.touched && phone.errors && phone.errors['required']}">
+                                <p *ngIf="phone.touched && phone.errors && phone.errors['required']"
+                                    class="validation-error ">
+                                    Phone is required
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2 mt-4">
+                    <input type="file" id="profile-input" hidden #uploadLogo name="logo" accept="image/*"
+                        (change)="onProfileChange($event)">
+
+                    <!-- add-img -->
+                    <div (click)="openImagePicker('profile-input')" style="cursor: pointer;">
+                        <div *ngIf="!previewProfilePicUrl" class="logo-card">
+                            <i class="fa-regular fa-image"></i>
+                        </div>
+                    </div>
+
+                    <!-- update-img -->
+                    <div *ngIf="previewProfilePicUrl" class="logo-card-img" style="cursor: pointer;">
+                        <i class="fa-solid fa-circle-xmark" (click)="removeProfilePicUrl()"></i>
+                        <img class="org-logo" [src]="previewProfilePicUrl" (click)="openImagePicker('profile-input')" />
+                        <div class="edit-profilepic-overlay">
+                            <div class="empty-white-bg">
+                                <i class="fa-solid fa-pen" (click)="openImagePicker('profile-input')"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4"></div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Email</label>
+                        <input type="text" class="form-control" name="email" [(ngModel)]="data.email" #email="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">DOB</label>
+                        <input type="date" class="form-control" name="dob" [(ngModel)]="data.dob" #dob="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Reporting To</label>
+                        <select name="report" [(ngModel)]="data.reportingTo" class="form-select" #report="ngModel">
+                            <option *ngFor="let teacher of teachers" [value]="teacher.id">{{teacher.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Date of Joining</label>
+                        <input type="date" class="form-control" name="doj" [(ngModel)]="data.doj" #doj="ngModel"
+                            required [ngClass]="{'is-invalid':doj.touched && doj.errors && doj.errors['required']}">
+                        <p *ngIf="doj.touched && doj.errors && doj.errors['required']" class="validation-error ">
+                            Date of joining is required
+                        </p>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Gender</label>
+                        <select class="form-select" name="gender" [(ngModel)]="data.gender" #gender="ngModel">
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Father's Name</label>
+                        <input type="text" class="form-control" name="fatherName" [(ngModel)]="data.fatherName"
+                            #fatherName="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Mother's Name</label>
+                        <input type="text" class="form-control" name="motherName" [(ngModel)]="data.motherName"
+                            #motherName="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Marital Status</label>
+                        <select class="form-select" name="marital" [(ngModel)]="data.maritalStatus" #martal="ngModel">
+                            <option value="SINGLE">Single</option>
+                            <option value="MARRIED">Married</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Qualification</label>
+                        <input type="text" class="form-control" name="qualification" [(ngModel)]="data.qualification"
+                            #qualification="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Work Experince</label>
+                        <input type="text" class="form-control" name="workExperience" [(ngModel)]="data.workExperience"
+                            #workExperience="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Previous School</label>
+                        <input type="text" class="form-control" name="previousSchool" [(ngModel)]="data.previousSchool"
+                            #previousSchool="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Previous School Address</label>
+                        <input type="text" class="form-control" name="previousSchoolAddress"
+                            [(ngModel)]="data.previousSchoolAddress" #previousSchoolAddress="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Goverment ID</label>
+                        <input type="text" class="form-control" name="govtId" [(ngModel)]="data.govtId"
+                            #govtId="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Address</label>
+                        <input type="text" class="form-control" name="address" [(ngModel)]="data.address"
+                            #address="ngModel">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-field mt-4">
+                        <label class="label">Permanent Address</label>
+                        <input type="text" class="form-control" name="permanentAddress"
+                            [(ngModel)]="data.permanentAddress" #permanentAddress="ngModel">
+                    </div>
+                </div>
+                <div class="col-8">
+                    <div class="form-field mt-4">
+                        <label class="label">Description</label>
+                        <textarea type="text" class="form-control h-100" rows="3" name="description"
+                            [(ngModel)]="data.description" #description="ngModel"></textarea>
+                    </div>
+                </div>
+                <div class="col-4" *ngIf="!data.id">
+                    <div class="form-field mt-4">
+                        <label class="label">Password</label>
+                        <input type="password" class="form-control" name="Password" [(ngModel)]="data.password"
+                            #Password="ngModel">
+                    </div>
+                </div>
+                <!-- <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Pinocde</label>
+                            <input type="number" class="form-control" name="pincode" [(ngModel)]="data.pincode"
+                                #pincode="ngModel" required
+                                [ngClass]="{'is-invalid':pincode.touched && pincode.errors && pincode.errors['required']}">
+                            <p *ngIf="pincode.touched && pincode.errors && pincode.errors['required']"
+                                class="validation-error ">
+                                Pinocde is required
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">State</label>
+                            <select name="state" class="form-select" [(ngModel)]="data.stateId" #state="ngModel" required
+                                [ngClass]="{'is-invalid':state.touched && state.errors && state.errors['required']}">
+                                <option *ngFor="let state of states" [value]="state.id">{{state.name}}</option>
+                            </select>
+                        </div>
+                        <p *ngIf="state.touched && state.errors && state.errors['required']" class="validation-error ">
+                            State is required
+                        </p>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Branch</label>
+                            <select name="branch" class="form-select" [(ngModel)]="data.instituteBranchId"
+                                #branch="ngModel">
+                                <option *ngFor="let branch of branches" [value]="branch.id">{{branch.name}}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Department</label>
+                            <select name="department" class="form-select" [(ngModel)]="data.departmentId"
+                                #department="ngModel">
+                                <option *ngFor="let department of departments" [value]="department.id">{{department.name}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-field mt-4">
+                            <label class="label">Course</label>
+                            <select name="course" class="form-select" [(ngModel)]="data.courseId" #course="ngModel">
+                                <option *ngFor="let course of courses" [value]="course.id">{{course.name}}</option>
+                            </select>
+                        </div>
+                    </div> -->
+            </div>
+        </div>
+        <div *ngIf="status != 'View'" class="d-flex justify-content-end p-3 pt-1">
+            <button type="button" class="btn btn-secondary me-2" (click)="close()">Cancel</button>
+            <button *ngIf="status == 'Add'" type="submit" class="btn btn-primary">Save</button>
+            <button *ngIf="status == 'Edit'" type="submit" class="btn btn-primary">Update</button>
+        </div>
+    </form>
+</div>

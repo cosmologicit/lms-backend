@@ -1,0 +1,43 @@
+<div class="card mb-0">
+    <div class="p-3 d-flex justify-content-between align-items-center">
+        <span class="title">{{status}} Announcement</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        <form #announcementForm="ngForm">
+            <div class="form-field mt-2">
+                <label class="label">Name*</label>
+                <input type="text" class="form-control" name="title" [(ngModel)]="data.title" #title="ngModel" required
+                    [ngClass]="{'is-invalid':title.touched && title.errors && title.errors['required']}">
+                <p *ngIf="title.touched && title.errors && title.errors['required']" class="validation-error">
+                    Title is required
+                </p>
+            </div>
+            <div class="d-flex justify-content-end mt-2">
+                <input id="check" type="checkbox" class="me-2 mb-1 pointer" [(ngModel)]="isSelectAll" name="check"
+                    (change)="checkAll()" style="align-self: flex-end">{{selectUnselectText}}
+            </div>
+            <div class="form-field mt-2">
+                <label class="label">Class</label>
+                <mat-select multiple [(ngModel)]="data.associationIds" name="classes" class="form-select">
+                    <div style="background-color: white; border: 0.5px solid rgb(213, 212, 212);border-radius: 7px;"
+                        class="shadow-sm">
+                        <mat-option *ngFor="let class of classes" [value]="class.id">{{class.name}}</mat-option>
+                    </div>
+                </mat-select>
+
+            </div>
+            <div class="form-field mt-3">
+                <label class="label">Description</label>
+                <textarea name="description" class="form-control h-100" [(ngModel)]="data.description"
+                    #description="ngModel" rows="2"></textarea>
+            </div>
+        </form>
+    </div>
+    <hr class="m-0">
+    <div class="p-3 d-flex justify-content-end">
+        <button type="button" class="btn btn-secondary me-2" (click)="close()">Cancel</button>
+        <button type="submit" class="btn btn-primary" (click)="onSubmit()">{{status=='Add'?'Save':'Update'}}</button>
+    </div>
+</div>

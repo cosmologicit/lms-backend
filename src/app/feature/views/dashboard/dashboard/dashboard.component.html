@@ -1,0 +1,344 @@
+<div>
+    <div class="d-flex mt-2 pe-4">
+        <div class="me-3 col-3">
+            <div class="p-3 card" *ngIf="role=='TEACHER'">
+                <div class="d-flex justify-content-center my-2">
+                    <img [src]="user.profilePic?user.profilePic:'../../../../../assets/images/Default icon.png'"
+                        width="100px" alt="Profile Image" class="profile-img shadow">
+                </div>
+                <div class="d-flex justify-content-center mt-3">
+                    <span style="font-size: 15px;font-weight: 500;">{{user.name}}</span>
+                </div>
+                <div class="timer-display" *ngIf="timer>0">
+                    <h3>{{ formatTimer(timer) }}</h3>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4">
+                    <button class="btn" [ngClass]="isCheckIn?'check-out-button':'btn-primary'"
+                        (click)="checkInAndOut()">
+                        {{isCheckIn?'Check Out':'Check In'}}</button>
+                </div>
+            </div>
+            <div class="p-3 card" *ngIf="role!='INSTITUTE_ADMIN'">
+                <div class="d-flex justify-content-center my-2" *ngIf="role=='STUDENT'">
+                    <img [src]="user.profilePic?user.profilePic:'../../../../../assets/images/Default icon.png'"
+                        width="100px" alt="Profile Image" class="profile-img shadow">
+                </div>
+                <div class="d-flex justify-content-center">
+                    <span style="font-size: 20px;font-weight: 500;">{{associationDetails.className}}</span>
+                </div>
+
+                <div class="mt-3 d-flex align-items-center justify-content-between" style="height: 80px;">
+                    <button class="btn btn-present">
+                        P : <span class="text-secondary">{{associationDetails.presentStudent}}</span>
+                    </button>
+                    <button class="btn btn-absent">
+                        A : <span class="text-secondary">{{associationDetails.absentStudent}}</span>
+                    </button>
+                    <button class="btn btn-leave">
+                        L : <span class="text-secondary">{{associationDetails.leaveStudent}}</span>
+                    </button>
+                </div>
+
+                <div class="d-flex justify-content-center mt-4" *ngIf="role=='STUDENT'">
+                    <span [ngClass]="associationDetails.isPresent?'present':'absent'">
+                        {{associationDetails.isPresent?'Present':'Absent'}}
+                    </span>
+                </div>
+                <div class="d-flex justify-content-center mt-4" *ngIf="user.associationId && role=='TEACHER'">
+                    <button class="btn btn-primary" [routerLink]="'/app/class/student-attendance'">Mark
+                        Attendance</button>
+                </div>
+            </div>
+            <div class="p-3 card" *ngIf="role=='STUDENT'" hidden>
+                <div id="feeCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <!-- Total Fee Slide -->
+                        <div class="carousel-item active">
+                            <div class="card text-center mb-0">
+                                <img src="../../../../../assets/images/Default icon.png" class="card-img-top"
+                                    alt="Total Fee" />
+                                <div class="card-body pb-0">
+                                    <h5 class="card-title">Total Fee</h5>
+                                    <p class="card-text">₹ {{ fees.totalFee }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Fee Details Slides -->
+                        <ng-container *ngFor="let fee of feeItems">
+                            <div class="carousel-item">
+                                <div class="card text-center mb-0">
+                                    <img [src]="fee.image" class="card-img-top" [alt]="fee.label" />
+                                    <div class="card-body pb-0">
+                                        <h5 class="card-title">{{ fee.label }}</h5>
+                                        <p class="card-text">₹ {{ fee.value }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <!-- Carousel Controls -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#feeCarousel"
+                        data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#feeCarousel"
+                        data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="p-3 card pointer admin-cards" *ngIf="role=='INSTITUTE_ADMIN'"
+                [routerLink]="'/app/user/teacher'">
+                <div class="d-flex align-items-center ">
+                    <div>
+                        <img src="../../../../../assets/images/Teacher.png" style="border-radius: 8px;" width="80px">
+                    </div>
+                    <div class="ms-3">
+                        <span style="font-size: 20px;font-weight: 500;">Total Teachers</span><br>
+                        <span style="font-size: 20px;font-weight: 500;">{{teachers.length==0?0:teachers.length}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 card pointer admin-cards" *ngIf="role=='INSTITUTE_ADMIN'"
+                [routerLink]="'/app/user/student'">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <img src="../../../../../assets/images/Student.png" style="border-radius: 8px;" width="80px">
+                    </div>
+                    <div class="ms-3">
+                        <span style="font-size: 20px;font-weight: 500;">Total Students</span><br>
+                        <span style="font-size: 20px;font-weight: 500;">{{students.length==0?0:students.length}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 card pointer admin-cards" *ngIf="role=='INSTITUTE_ADMIN'"
+                [routerLink]="'/app/class/association'">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <img src="../../../../../assets/images/class.jpeg" style="border-radius: 8px;" width="80px">
+                    </div>
+                    <div class="ms-3">
+                        <span style="font-size: 20px;font-weight: 500;">Total Class</span><br>
+                        <span style="font-size: 20px;font-weight: 500;">{{classes.length==0?0:classes.length}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="p-3 card pointer admin-cards" *ngIf="role=='INSTITUTE_ADMIN'"
+                [routerLink]="'/app/class/subject'">
+                <div class="d-flex align-items-center">
+                    <div>
+                        <img src="../../../../../assets/images/subject.jpeg" style="border-radius: 8px;" width="80px">
+                    </div>
+                    <div class="ms-3">
+                        <span style="font-size: 20px;font-weight: 500;">Total Subjects</span><br>
+                        <span style="font-size: 20px;font-weight: 500;">{{subjects.length==0?0:subjects.length}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-9">
+            <div class="card p-3">
+                <div class="d-flex align-items-center">
+                    <div *ngIf="user.instituteLogoUrl" class="me-3">
+                        <img [src]=" user.instituteLogoUrl" alt="Institute logo" class="institute-logo">
+                    </div>
+                    <div class="ms-1 mb-2">
+                        <span style="font-size: 18px;font-weight: 500;">Hey!
+                            &nbsp;{{user.name}}</span><br>
+                        <span class="text-secondary">{{quotes.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3" *ngIf="role!='INSTITUTE_ADMIN'">
+                <div class="d-flex">
+                    <div class="icon attendance">
+                        <i class="fa-solid fa-calendar"></i>
+                    </div>
+                    <div class="w-100">
+                        <div>
+                            <span style="font-size: 18px;font-weight: 500;">Attendance</span><br>
+                            <span class="text-secondary"
+                                style="font-size: 14px;">{{startDate|date:'dd-MMM-yyyy'}}&nbsp;&nbsp;&nbsp;-
+                                &nbsp;&nbsp;&nbsp;{{endDate|date:'dd-MMM-yyyy'}}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-3">
+                            <div *ngFor="let data of weekData;let idx = index">
+                                <div>
+                                    <span>{{data.day}}</span>
+                                    <span style="font-weight: 500;"> {{data.date|date:'dd'}}</span>
+                                </div>
+                                <div style="font-size: 12px;">
+                                    <span
+                                        *ngIf="data.status=='PRESENT' ||data.status=='HALFDAY'">{{role=='TEACHER'?formatTime(data.workingHours):'Present'}}</span>
+                                    <span *ngIf="data.status=='ABSENT'" class="text-danger">Absent</span>
+                                    <span *ngIf="data.status=='Weekend'" style="color: pink;">Weekend</span>
+                                    <span *ngIf="data.status=='HOLIDAY'"
+                                        style="color: pink;">{{data.holidayName}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3" *ngIf="role!='INSTITUTE_ADMIN'">
+                <div class="d-flex">
+                    <div class="icon time-table">
+                        <i class="fa-solid fa-table"></i>
+                    </div>
+                    <div>
+                        <div>
+                            <span style="font-size: 18px;font-weight: 500;">Time Table</span><br>
+                            <span class="text-secondary"
+                                style="font-size: 14px;">{{todayDate|date:'dd-MMM-yyyy'}}</span>
+                        </div>
+                        <div class="d-flex mt-3" style="max-width: 53vw;overflow: auto; " *ngIf="periods.length>0">
+                            <div *ngFor="let day of periods">
+                                <div class="schedule p-3" [style.backgroundColor]="day.color">
+                                    <div class="d-flex align-items-center text-secondary">
+                                        <i class="fa-regular fa-clock"></i>
+                                        <span class="ms-2">{{day.intervalFrom}}</span>
+                                        <span class="mx-1">-</span>
+                                        <span>{{day.intervalTo}}</span>
+                                    </div>
+                                    <div class="mt-1 d-flex">
+                                        Subject: <div class="ellipse" [title]="day.subjectName"
+                                            style="max-width: 100px;">
+                                            {{day.subjectName}}</div>
+                                    </div>
+                                    <div class="mt-3 p-1 d-flex justify-content-center"
+                                        style="background-color: white;border-radius: 5px;">
+                                        <div class="ellipse"
+                                            [title]="role=='STUDENT'?day.teacherName:day.associationName">
+                                            {{role=='STUDENT'?day.teacherName:day.associationName}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="periods.length==0" class="my-3 text-secondary">
+                            No Record Found
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card p-3">
+                <div class="d-flex">
+                    <div class="icon time-table">
+                        <i class="fa-solid fa-mountain"></i>
+                    </div>
+                    <div class="w-100">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <span style="font-size: 18px;font-weight: 500;">Upcoming Holidays</span><br>
+                                <span class="text-secondary"
+                                    style="font-size: 14px;">{{quaterStartDate|date:'dd-MMM-yyyy'}}&nbsp;&nbsp;&nbsp;-
+                                    &nbsp;&nbsp;&nbsp;{{quaterEndDate|date:'dd-MMM-yyyy'}}</span>
+                            </div>
+                            <div class="text-secondary pointer" style="font-size: 13px;">
+                                <span class="pointer" [routerLink]="'/app/institute/holiday'">see-more</span>
+                            </div>
+                        </div>
+                        <div class="d-flex mt-3" style="max-width: 53vw;overflow: auto; " *ngIf="holidays.length>0">
+                            <div *ngFor="let holiday of holidays">
+                                <div class="schedule px-3 py-2 admin-cards" [title]="holiday.title"
+                                    [style.backgroundColor]="holiday.color">
+                                    <div>
+                                        <div class="ellipse-holiday ellipse">{{holiday.title}}</div>
+                                        <span>{{holiday.startDate|date:'dd MMM'}}</span>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="holidays.length==0" class="my-3 text-secondary">
+                            No Record Found
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex w-100">
+                <div class="card p-3 me-2 w-100">
+                    <div class="d-flex">
+                        <div class="icon attendance">
+                            <i class="fa-solid fa-volume-low"></i>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span style="font-size: 18px;font-weight: 500;">Announcement</span><br>
+                                    <span class="text-secondary"
+                                        style="font-size: 14px;">{{monthSatrtDate|date:'dd-MMM-yyyy'}}&nbsp;&nbsp;&nbsp;
+                                        -
+                                        &nbsp;&nbsp;&nbsp;{{monthEndDate|date:'dd-MMM-yyyy'}}</span>
+                                </div>
+                                <div class="text-secondary" style="font-size: 13px;">
+                                    <span class="pointer" [routerLink]="'/app/institute/announcement'">see-more</span>
+                                </div>
+                            </div>
+                            <div class="p-1" style="min-height: 250px;max-height: 250px; overflow: auto; "
+                                *ngIf="announcements.length>0">
+                                <div *ngFor="let announcement of announcements">
+                                    <div class="holiday-box admin-cards" [style.backgroundColor]="announcement.color">
+                                        <span>
+                                            {{announcement.title}} <br>
+                                            <!-- {{announcemnet.|date:'dd-MMM-yyyy'}} -->
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-1 d-flex align-items-center justify-content-center" style="min-height: 250px;"
+                                *ngIf="announcements.length==0">
+                                <span class="text-secondary" style="font-size: 16px;">No Records</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card p-3 ms-2 w-100">
+                    <div class="d-flex">
+                        <div class="icon attendance">
+                            <i class="fa-solid fa-file-lines"></i>
+                        </div>
+                        <div class="w-100">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span style="font-size: 18px;font-weight: 500;">Assignment</span><br>
+                                    <span class="text-secondary"
+                                        style="font-size: 14px;">{{monthSatrtDate|date:'dd-MMM-yyyy'}}&nbsp;&nbsp;&nbsp;
+                                        -
+                                        &nbsp;&nbsp;&nbsp;{{monthEndDate|date:'dd-MMM-yyyy'}}</span>
+                                </div>
+                                <div class="text-secondary" style="font-size: 13px;">
+                                    <span class="pointer" [routerLink]="'/app/class/assignment'">see-more</span>
+                                </div>
+                            </div>
+                            <div class="p-1" style="min-height: 250px;max-height: 250px;overflow: auto;"
+                                *ngIf="assignments.length>0">
+                                <div *ngFor="let assignment of assignments">
+                                    <div class="holiday-box admin-cards" [style.backgroundColor]="assignment.color">
+                                        <span>
+                                            {{assignment.title}} <br>
+                                            {{assignment.startDate|date:'dd-MMM-yyyy'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-1 d-flex align-items-center justify-content-center" style="min-height: 250px;"
+                                *ngIf="assignments.length==0">
+                                <span class="text-secondary" style="font-size: 16px;">No Records</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>

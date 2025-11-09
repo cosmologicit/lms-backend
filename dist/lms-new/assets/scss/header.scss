@@ -1,0 +1,26 @@
+.header {
+    background: #fff;
+    box-shadow: 0 14px 25px #cacaca1f;
+    left: 210px;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 2;
+    height: 60px;
+    z-index: 999;
+    transition: all .2s ease-in-out 0s;
+    padding: 0px 25px;
+
+    .logo {
+        width: 42px;
+        border-radius: 50%;
+        border: 2px solid #E6E6E6;
+        padding: 2px;
+    }
+
+    .header-menus {
+        display: flex;
+        align-items: center;
+        justify-content: end;
+    }
+}

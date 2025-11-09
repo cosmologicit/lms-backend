@@ -1,0 +1,68 @@
+<div style="max-height: 95vh;overflow: auto; ">
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <span class="title">{{status}} Syllabus</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <form #syllabusForm="ngForm">
+        <div class="p-3">
+            <div class="form-field">
+                <label class="label">Name*</label>
+                <input type="text" class="form-control" [(ngModel)]="data.name" name="name" #name="ngModel" required
+                    [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                <p *ngIf="name.touched && name.errors && name.errors['required']" class="validation-error ">
+                    Name is required
+                </p>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Class</label>
+                <select type="text" class="form-select" [(ngModel)]="data.associationId" name="associationId"
+                    #associationId="ngModel" (change)="filterSubject()" required
+                    [ngClass]="{'is-invalid':associationId.touched && associationId.errors && associationId.errors['required']}">
+                    <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                </select>
+                <p *ngIf="associationId.touched && associationId.errors && associationId.errors['required']"
+                    class="validation-error ">
+                    Class is required
+                </p>
+            </div>
+            <div class="form-field mt-4" *ngIf="data.associationId && filteredSubject.length>0">
+                <label class="label">Subject</label>
+                <select type="text" class="form-select" [(ngModel)]="data.subjectId" name="subjectId"
+                    #subjectId="ngModel" (change)="filterChapters()" required
+                    [ngClass]="{'is-invalid':subjectId.touched && subjectId.errors && subjectId.errors['required']}">
+                    <option *ngFor="let subject of filteredSubject" [value]="subject.id">{{subject.name}}</option>
+                </select>
+                <p *ngIf="subjectId.touched && subjectId.errors && subjectId.errors['required']"
+                    class="validation-error ">
+                    Subject is required
+                </p>
+            </div>
+            <div class="form-field mt-4" *ngIf="data.subjectId && filteredChapters.length>0">
+                <label class="label">Chapter</label>
+                <mat-select class="form-select" name="chapter" [(ngModel)]="data.chapterIds" multiple>
+                    <div class="drop-down">
+                        <mat-option *ngFor="let chapter of filteredChapters"
+                            [value]="chapter.id">{{chapter.name}}</mat-option>
+                    </div>
+                </mat-select>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Description</label>
+                <textarea type="text" class="form-control h-100" [(ngModel)]="data.description" name="description"
+                    #description="ngModel" rows="2" required
+                    [ngClass]="{'is-invalid':description.touched && description.errors && description.errors['required']}"></textarea>
+                <p *ngIf="description.touched && description.errors && description.errors['required']"
+                    class="validation-error ">
+                    Description is required
+                </p>
+            </div>
+        </div>
+        <hr class="m-0">
+        <div class="d-flex justify-content-end p-3">
+            <button type="button" class="btn btn-secondary me-2" (click)="close()">Cancel</button>
+            <button type="submit" class="btn btn-primary"
+                (click)="onSubmit()">{{status=='Add'?'Save':'Update'}}</button>
+        </div>
+    </form>
+</div>

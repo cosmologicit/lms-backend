@@ -1,0 +1,13 @@
+<div class="card mb-0">
+    <div class="d-flex justify-content-between p-3">
+        <span class="title">{{data.title}}</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <div class="p-3" style="font-size: 18px;">{{data.message}}</div>
+    <hr class="mb-0 mt-5">
+    <div class="d-flex justify-content-end p-3" mat-dialog-actions>
+        <button type="button" class="btn btn-secondary me-2 " (click)="close()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="onSubmit()">Confirm</button>
+    </div>
+</div>

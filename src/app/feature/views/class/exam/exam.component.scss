@@ -1,0 +1,18 @@
+.form-select:focus{
+    outline: none;
+    box-shadow: none;
+}
+
+.form-control:focus{
+    outline: none;
+    box-shadow: none;
+}
+
+ngx-datatable {
+  width: 100%;
+  overflow-x: auto;
+}
+
+ngx-datatable .datatable-body {
+  overflow-x: auto;
+}

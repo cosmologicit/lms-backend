@@ -1,0 +1,15 @@
+<div class="card mb-0">
+    <div class="title d-flex justify-content-between p-3">
+        <span>Mapping</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        Would you like to link everything with {{name}} ?
+    </div>
+    <hr class="m-0">
+    <div class="d-flex justify-content-end p-3">
+        <button class="btn btn-secondary me-2" (click)="onsubmit(false)">No</button>
+        <button class="btn btn-primary" (click)="onsubmit(true)">Yes</button>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+.form-control:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.ellipse {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    max-width: 300px;
+}

@@ -1,0 +1,127 @@
+<div class="d-flex justify-content-between align-items-center my-3">
+    <p class="title ms-2 ps-1">{{status==constants.SUBMIT ? 'Create New' : 'Edit'}} Assignment</p>
+    <div class="d-flex justify-content-end align-items-center">
+        <button class="btn btn-secondary me-2" (click)="saveAssignment(constants.DRAFT)">Save as Draft</button>
+        <button class="btn btn-primary" (click)="saveAssignment(constants.SUBMIT)">Submit</button>
+    </div>
+</div>
+
+<div>
+    <div class="card p-3 mb-0 mb-3">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-field">
+                    <label class="label">Assignment Title</label>
+                    <input type="text" class="form-control" [(ngModel)]="assignment.title">
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-field">
+                    <label class="label">Start Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="assignment.startDate">
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-field">
+                    <label class="label">End Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="assignment.endDate">
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-field">
+                    <label class="label">Time</label>
+                    <input type="time" class="form-control" name="time" [(ngModel)]="assignment.time" #time="ngModel">
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col-3">
+                <div class="form-field">
+                    <label class="label">Class</label>
+                    <select name="association" class="form-select" [(ngModel)]="assignment.associationId"
+                        (change)="filterSubjects()" #association="ngModel">
+                        <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-3" *ngIf="assignment.associationId && filteredSubjects.length>0">
+                <div class="form-field">
+                    <label class="label">Subject</label>
+                    <select name="subject" class="form-select" [(ngModel)]="assignment.subjectId"
+                        (change)="filterChapters()" #subject="ngModel">
+                        <option *ngFor="let subject of filteredSubjects" [value]="subject.id">{{subject.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-3" *ngIf="assignment.subjectId && filteredChapters.length>0">
+                <div class="form-field">
+                    <label class="label">Chapter</label>
+                    <select name="chapter" class="form-select" [(ngModel)]="assignment.chapterId" #chapter="ngModel">
+                        <option *ngFor="let chapter of filteredChapters" [value]="chapter.id">{{chapter.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="card mt-2 mb-0">
+        <app-add-assignment-details></app-add-assignment-details>
+    </div> -->
+
+    <!-- <div class="d-flex justify-content-center w-100" *ngIf="data.questions && data.questions.length;">
+        <div class="w-75">
+            <div class="mt-2" *ngFor="let question of data.questions;let idx=index">
+                <app-add-assignment-question [questionRequest]="question"></app-add-assignment-question>
+            </div>
+        </div>
+    </div> -->
+
+    <div class="row">
+        <div class="col-3">
+            <div class="card pb-2">
+                <p class="text-center p-2"><b>Summary</b></p>
+
+                <div *ngFor="let section of assignment.sections;let sectionIdx=index">
+                    <p class="section-summary p-2">
+                        <b>Section&nbsp;{{sectionIdx + 1}}&nbsp;:&nbsp;</b>{{section.name}}
+                    </p>
+                    <div class="questions-summary">
+                        <div class="question-summary" *ngFor="let question of section.questions;let idx=index"
+                            [ngClass]="{'focused' : question.isFocused}">
+                            {{idx + 1}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <mat-expansion-panel *ngFor="let section of assignment.sections; let sectionIdx=index" class="mb-3"
+                [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title class="d-flex justify-content-between">
+                        <div class="input-effect w-50">
+                            <input class="border-effect" type="text" placeholder="Section"
+                                (click)="$event.stopPropagation();" (keydown)="$event.stopPropagation();"
+                                (keypress)="$event.stopPropagation();" [(ngModel)]="section.name">
+                            <span class="focus-border"></span>
+                        </div>
+                        <mat-icon style="color: #1b3e99;" matTooltip="Add New Section" [matTooltipPosition]="'left'"
+                            (click)="addSection(sectionIdx);$event.stopPropagation();">add_circle</mat-icon>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="question-item" *ngFor="let question of section.questions;let idx=index">
+                    <app-add-assignment-question class="w-100" [question]="question"
+                        (questionFocused)="questionFocused(sectionIdx, idx)"
+                        (questionDeleted)="questionDeleted(sectionIdx, idx)"></app-add-assignment-question>
+
+                    <div class="side-options" (click)="addNewQuestion(sectionIdx, idx)">
+                        <mat-icon>add_circle</mat-icon>
+                    </div>
+                </div>
+            </mat-expansion-panel>
+        </div>
+    </div>
+</div>

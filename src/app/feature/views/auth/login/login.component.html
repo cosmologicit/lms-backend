@@ -1,0 +1,69 @@
+<div class="colored-background">
+    <div class="main-box">
+        <div class="row m-0">
+            <div>
+                <div class=" row border shadow login-box p-0">
+                    <div class="col-lg-6 d-none d-lg-block p-0 login-left-box" style="background-color:#9a159a;">
+                        <!-- <img class="img-fluid" style="object-fit: contain;" src="../../../../../assets/images/login.png"> -->
+                    </div>
+                    <div class="col-lg-6 col-sm-12 bg-white login-right-box">
+                        <div class="d-flex align-items-center px-1" style="max-height: 15vh; min-height: 15vh;">
+                            <div>
+                                <span style="font-size: 3.7vh; color: gray;">Power Up Your Learning</span><br>
+                                <span>Sign in to connect and learn</span>
+                            </div>
+                        </div>
+                        <div class="px-1">
+                            <div>
+                                <span style="font-size: 3.3vh; color: gray;">Sign In</span>
+                            </div>
+                            <form #loginForm="ngForm" (ngSubmit)="onSubmit()">
+                                <div>
+                                    <div class="form-field mt-4">
+                                        <label class="label">Email/Username*</label>
+                                        <input type="text" class="form-control" name="email" [(ngModel)]="data.email"
+                                            #email="ngModel" required
+                                            [ngClass]="{'is-invalid':email.touched && email.errors && email.errors['required']}">
+                                        <p *ngIf="email.touched && email.errors && email.errors['required']"
+                                            class="validation-error ">
+                                            Email is required
+                                        </p>
+                                    </div>
+
+                                    <div class="form-field mt-4 pb-0">
+                                        <label class="label">Password*</label>
+                                        <input type="{{isPasswordVisible?'text':'password'}}" class="form-control"
+                                            [(ngModel)]="data.password" #password="ngModel" name="password" required
+                                            [ngClass]="{'is-invalid':password.touched && password.errors && password.errors['required']}">
+                                        <i *ngIf="isPasswordVisible" (click)="isPasswordVisible=false"
+                                            class="fa-regular fa-eye input-icons"></i>
+                                        <i *ngIf="!isPasswordVisible" (click)="isPasswordVisible=true"
+                                            class="fa-regular fa-eye-slash input-icons"></i>
+                                    </div>
+                                    <p *ngIf="password.touched && password.errors && password.errors['required']"
+                                        class="validation-error ">
+                                        Password is required
+                                    </p>
+
+                                    <div class="d-flex justify-content-between mt-4">
+                                        <div style="color: gray;">Need an account?
+                                            <span class="pointer" style="color: rgba(78, 78, 239, 0.625);"
+                                                [routerLink]="'/auth/signup'">Sign
+                                                Up </span>
+                                        </div>
+                                        <div class="pointer" [routerLink]="'/auth/forgot-password'"
+                                            style="color: rgba(78, 78, 239, 0.625);">Forgot
+                                            Password</div>
+                                    </div>
+                                    <div class="my-4">
+                                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

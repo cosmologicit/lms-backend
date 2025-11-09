@@ -1,0 +1,116 @@
+<div class="card mb-0">
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <span class="title">{{status}} Exam</span>
+    </div>
+    <hr class="m-0">
+    <div class="p-3">
+        <form #examForm="ngForm">
+            <div class="row">
+                <div class="form-field col-6 mt-2">
+                    <label class="label">Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="data.name" name="name" #name="ngModel" required
+                        [ngClass]="{'is-invalid':name.touched && name.errors && name.errors['required']}">
+                    <p *ngIf="name.touched && name.errors && name.errors['required']" class="validation-error">
+                        Name is required
+                    </p>
+                </div>
+                <div class="form-field col-6 mt-2">
+                    <label class="label">Date</label>
+                    <input type="date" class="form-control" [(ngModel)]="data.date" name="date" #date="ngModel"
+                        [min]="todayDate" required
+                        [ngClass]="{'is-invalid':date.touched && date.errors && date.errors['required']}">
+                    <p *ngIf="date.touched && date.errors && date.errors['required']" class="validation-error">
+                        Date is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 col-6">
+                    <label class="label">Max. Marks</label>
+                    <input type="number" class="form-control" [(ngModel)]="data.maxMarks" name="maxMarks"
+                        #maxMarks="ngModel" (blur)="setMarks()" required
+                        [ngClass]="{'is-invalid':maxMarks.touched && maxMarks.errors && maxMarks.errors['required']}">
+                    <p *ngIf="maxMarks.touched && maxMarks.errors && maxMarks.errors['required']"
+                        class="validation-error">
+                        Max. Marks is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 col-6">
+                    <label class="label">Passing Marks</label>
+                    <input type="number" class="form-control" [(ngModel)]="data.passingMarks" name="passingMarks"
+                        #passingMarks="ngModel" required (blur)="setMarks()"
+                        [ngClass]="{'is-invalid':passingMarks.touched && passingMarks.errors && passingMarks.errors['required']}">
+                    <p *ngIf="passingMarks.touched && passingMarks.errors && passingMarks.errors['required']"
+                        class="validation-error">
+                        Passing Marks is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 col-6">
+                    <label class="label">Start Time</label>
+                    <input [ngxTimepicker]="picker" class="form-control" [(ngModel)]="data.startTime" name="start"
+                        #start="ngModel" [min]="startTime" [max]="endTime" required readonly
+                        [ngClass]="{'is-invalid':start.touched && start.errors && start.errors['required']}">
+                    <ngx-material-timepicker class="timepicker-styled" #picker
+                        style="z-index: 1000;"></ngx-material-timepicker>
+                    <p *ngIf="start.touched && start.errors && start.errors['required']" class="validation-error">
+                        Start Time is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 col-6">
+                    <label class="label">End Time</label>
+                    <input [ngxTimepicker]="endpicker" class="form-control" [(ngModel)]="data.endTime" name="end"
+                        #end="ngModel" [min]="data.startTime!" [max]="endTime" [disabled]="!data.startTime" readonly
+                        required [ngClass]="{'is-invalid':end.touched && end.errors && end.errors['required']}">
+                    <ngx-material-timepicker #endpicker></ngx-material-timepicker>
+                    <p *ngIf="end.touched && end.errors && end.errors['required']" class="validation-error">
+                        End Time is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 col-6">
+                    <label class="label">Class</label>
+                    <select class="form-select" [(ngModel)]="data.associationId" name="class" #class="ngModel" required
+                        [ngClass]="{'is-invalid':class.touched && class.errors && class.errors['required']}"
+                        (change)="filterSubjects()">
+                        <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                    </select>
+                    <p *ngIf="class.touched && class.errors && class.errors['required']" class="validation-error">
+                        Class is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 col-6" *ngIf="data.associationId">
+                    <label class="label">Subject</label>
+                    <select class="form-select" [(ngModel)]="data.subjectId" name="subject" #subject="ngModel" required
+                        [ngClass]="{'is-invalid':subject.touched && subject.errors && subject.errors['required']}">
+                        <option *ngFor="let subject of filteredSubjects" [value]="subject.id">{{subject.name}}</option>
+                    </select>
+                    <p *ngIf="subject.touched && subject.errors && subject.errors['required']" class="validation-error">
+                        Subject is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 col-6">
+                    <label class="label">Exam Type</label>
+                    <select class="form-select" [(ngModel)]="data.examType" name="examType" #examType="ngModel" required
+                        [ngClass]="{'is-invalid':examType.touched && examType.errors && examType.errors['required']}">
+                        <option value="WEEKLY_TEST">Weekly Test</option>
+                        <option value="UNIT_TEST">Unit Test</option>
+                        <option value="HALF_YEARLY">Half Yearly</option>
+                        <option value="ANNUAL_EXAMS">Annual Exams</option>
+                        <option value="OTHER">Other</option>
+                    </select>
+                    <p *ngIf="examType.touched && examType.errors && examType.errors['required']"
+                        class="validation-error">
+                        Exam Type is required
+                    </p>
+                </div>
+                <div class="form-field mt-4 col-6">
+                    <label class="label">Description</label>
+                    <textarea class="form-control h-100" name="description" [(ngModel)]="data.description"
+                        #description="ngModel" rows="2"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr class="m-0">
+    <div class="d-flex justify-content-end p-3">
+        <button class="btn btn-secondary" (click)="close()">Cancel</button>
+        <button class="btn btn-primary ms-2" (click)="onSubmit()">{{status=='Add'?'Save':'Update'}}</button>
+    </div>
+</div>

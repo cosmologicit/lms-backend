@@ -1,0 +1,111 @@
+.event-title {
+  color: #333; /* Ensure visible text color */
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+
+.weekend-day {
+  background-color: #fff6f6;
+  height: 100%; 
+}
+
+.day-box{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  padding: 5px;
+  max-height: 60px;
+  border-radius: 5px;
+}
+
+.present-box{
+  background-color: #D7F3E2;
+  border-color: 1px solid #0EBC6B;
+  box-shadow: -3px 0px 0px -1px #0EBC6B;
+}
+
+.half-day{
+  background: linear-gradient(to right, #8fe5b3 50%, transparent 50%);
+  box-shadow:-3px 0px 0px -1px #0EBC6B;
+}
+
+.absent-box{
+  background-color: #FFD9DA;
+  box-shadow: -3px 0px 0px -1px #EC5259;
+}
+
+.holiday-box{
+  background-color: rgb(223, 223, 253);
+  box-shadow:-3px 0px 0px -1px rgb(143, 143, 255);
+}
+
+.leave-box{
+  background-color: #f7ddac;
+  box-shadow:-3px 0px 0px -1px #f2ab28;
+}
+
+.mini-calender{
+  display: flex;
+  background-color: white;
+  align-items: center;
+  padding: 8px 5px;
+  font-size: 18px;
+  border-radius: 7px;
+}
+
+.today-date {
+ background-color: rgb(123, 123, 255);
+ border-radius: 5px;
+ padding: 3px;
+ width: 35px;
+ margin: 4px 3px -4px 5px;
+ font-weight: bold; 
+ color: white;
+}
+
+.cal-day-cell--today {
+  background-color: blue !important;
+}
+
+.info-card {
+  position: absolute;
+  // background-color: #333;
+  color: #EC5259;
+  padding: 20px;
+}
+
+
+.btn-present{
+    color: #8cf68c;
+    min-width: 80px;
+    font-weight: 600;
+    background-color: transparent;
+    border: 1px solid #8cf68c;
+}
+
+
+.btn-absent{
+    color: #f63e3e;
+      min-width: 80px;
+    font-weight: 600;
+    background-color: transparent;
+    border: 1px solid #f63e3e;
+}
+
+.btn-leave{
+    color: #ffc864;
+      min-width: 80px;
+    font-weight: 600;
+    background-color: transparent;
+    border: 1px solid #ffc864;
+}
+
+.btn-holiday{
+    color: #a1a1f9;
+      min-width: 80px;
+    font-weight: 600;
+    background-color: transparent;
+    border: 1px solid #a1a1f9;
+}

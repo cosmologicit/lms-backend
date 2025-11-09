@@ -1,0 +1,17 @@
+<div class="main-wrapper">
+    <app-header *ngIf="user?.instituteId"></app-header>
+    <app-drawer *ngIf="user?.instituteId"></app-drawer>
+    <app-loader *ngIf="isProcessing"></app-loader>
+
+    <div class="page-wrapper" *ngIf="user?.instituteId">
+        <div class="content container-fluid p-0 pt-1 pe-2">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+    <div *ngIf="showStartupUi" class="py-3 px-5">
+        <div class="d-flex justify-content-center py-2">
+            <span style="font-size: 20px;font-weight: 500; color: black;">Lets Get You Started</span>
+        </div>
+        <router-outlet></router-outlet>
+    </div>
+</div>

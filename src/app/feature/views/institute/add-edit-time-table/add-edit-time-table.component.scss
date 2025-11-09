@@ -1,0 +1,40 @@
+label{
+    margin-bottom: 10px;
+    font-weight: 400;
+}
+
+.days{
+    max-height: 50vh;
+    overflow: auto;
+     
+}
+
+::ng-deep .mdc-tab-indicator .mdc-tab-indicator__content--underline {
+  background-color: blue !important;  /* Change the underline color here */
+}
+
+.custom-select {
+  height: 40px; /* Set the desired height */
+  padding: 5px; /* Optional: add padding for better appearance */
+  font-size: 16px; /* Optional: set font size */
+  border: 1px solid #ccc; /* Optional: add border styling */
+  border-radius: 4px; /* Optional: add border radius for rounded corners */
+}
+
+.form-control:disabled{
+  background-color: white;
+}
+
+.form-select-sm{
+  width: 100px;
+  height: 28px;
+  border: none;
+}
+
+.form-select-sm:active{
+  border: none;
+}
+
+.form-select-sm:focus-visible{
+  border: none;
+}

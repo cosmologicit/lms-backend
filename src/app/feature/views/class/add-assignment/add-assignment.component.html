@@ -1,0 +1,144 @@
+<div>
+    <div class="card title p-3 mb-0">
+        <div class="d-flex justify-content-between align-items-center">
+            <span><span *ngIf="status!='Submit'">{{status}}</span> Assignment</span>
+            <span *ngIf="studentName && status=='Examine'">{{studentName}}</span>
+            <div>
+                <button *ngIf="status=='Examine'" class="btn btn-secondary me-2">Save as draft</button>
+                <button *ngIf="status!='View'" class="btn btn-primary"
+                    (click)="role=='STUDENT'||status=='Examine'?onSubmit():openModal()">Submit</button>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col-3">
+            <div class="card p-3 mb-0" style="height: 75vh;overflow: auto; background-color: rgb(248, 248, 248);">
+                <div cdkDropList class="example-list mb-2" (cdkDropListDropped)="drop($event)">
+                    <div class="example-box" *ngFor="let question of data.questions;let idx=index" cdkDrag
+                        [cdkDragDisabled]="status !='Add'&& status!='Edit'"
+                        [ngClass]="{'example-box-active':currentEditableIndex==idx}">
+                        <div class="d-flex" (click)="editQuestion(idx)">
+                            <div class="d-flex justify-content-between">
+                                <div style="background-color: pink;padding: 2px 5px 0px 2px;border-radius: 6px;">
+                                    <i *ngIf="question.type=='SUBJECTIVE'" class="fa-regular fa-pen-to-square ms-1"></i>
+                                    <i *ngIf="question.type=='OBJECTIVE'" class="fa-regular fa-square-check ms-1"></i>
+                                    <span class="ms-2">{{idx+1}}</span>
+                                </div>
+                                <div class="ms-2 ellipse" [title]="question.question">
+                                    {{question.question}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-9">
+            <div class="card mb-0 ">
+                <div class="d-flex justify-content-center w-100 mt-4" *ngIf="status=='Add'||status=='Edit'">
+                    <span class="me-2" [ngClass]="isObjectiveActive?'text-normal':'text-active'">Subjective</span>
+                    <mat-slide-toggle (change)="toggleQuestionType()"
+                        [(ngModel)]="isObjectiveActive"></mat-slide-toggle>
+                    <span [ngClass]="isObjectiveActive?'text-active':'text-normal'">Objective</span>
+                </div>
+                <div class="d-flex p-4 " [ngClass]="role!='STUDENT'?'mt-2':'align-items-center'"
+                    style="height: 58vh;overflow: auto;">
+                    <div class="w-100">
+                        <div>
+                            <div class="d-flex align-items-center">
+
+                                <div class="w-100">
+                                    <div class="d-flex justify-content-end">
+                                        <div class="form-field me-2 mb-2">
+                                            <label class="label">Positive Mark</label>
+                                            <input type="number" class="form-control" name="positive"
+                                                #positive="ngModel" [readOnly]="status!='Add'&&status!='Edit'"
+                                                [(ngModel)]="data.questions![currentEditableIndex].positiveMark">
+                                        </div>
+                                        <div class="form-field">
+                                            <label class="label">Negative Mark</label>
+                                            <input type="number" class="form-control" name="negative"
+                                                [readOnly]="status!='Add'&& status!='Edit'"
+                                                [(ngModel)]="data.questions![currentEditableIndex].negativeMark"
+                                                #negative="ngModel">
+                                        </div>
+                                        <div class="form-field ms-2 mb-2" *ngIf="status=='Examine'">
+                                            <label class="label">Obtained Mark</label>
+                                            <input type="number" class="form-control" name="Obtained"
+                                                #Obtained="ngModel"
+                                                [(ngModel)]="data.questions![currentEditableIndex].obtainMarks">
+                                        </div>
+                                    </div>
+                                    <div class="d-flex">
+                                        <div class="d-flex align-items-center me-2">
+                                            <span class="me-2"
+                                                style="font-size: 20px;">{{currentEditableIndex+1}}</span>
+                                            <i class="fa-solid fa-arrow-right"></i>
+                                        </div>
+                                        <textarea type=" text" rows="3" class="form-control w-100"
+                                            style="font-size: 20px;height: 100%;"
+                                            [readOnly]="status!='Add'&& status!='Edit'"
+                                            [(ngModel)]="data.questions![currentEditableIndex].question" name="ques"
+                                            #ques="ngModel"></textarea>
+                                    </div>
+                                    <div class="d-flex mt-3"
+                                        *ngIf="status!='Add'&& status!='Edit' && data.questions![currentEditableIndex].type=='SUBJECTIVE'">
+                                        <div class="mt-2 me-2" style="font-size: 16px;font-weight: 600;">Ans.</div>
+                                        <textarea class="form-control h-100" rows="6"
+                                            [readOnly]="status=='View'|| status=='Examine'"
+                                            [(ngModel)]="data.questions![currentEditableIndex].answerText"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngIf="isObjectiveActive" class="mt-3 ms-5" style="max-height: 30vh;overflow: auto; ">
+                                <div class="mb-2"
+                                    *ngFor="let option of data.questions![currentEditableIndex].options;let idx=index">
+                                    <div class="d-flex align-items-center">
+                                        <span class="me-2">{{getLetterIndex(idx)}}</span>
+                                        <div class="me-2">
+                                            <input type="text" class="form-control" [(ngModel)]="option.text"
+                                                #option="ngModel" [readOnly]="status!='Add'&& status!='Edit'"
+                                                name="option" [ngClass]="{'green-border': status == 'Examine' && option.isCorrect,
+                                                    'red-border':status=='Examine'&& option.id==data.questions![currentEditableIndex].userAnswerOptionId && !option.isCorrect,
+                                                } ">
+                                        </div>
+                                        <div class="me-2" *ngIf="status=='Add'||status=='Edit'">
+                                            <input type="checkbox" [(ngModel)]="option.isCorrect" name="optionCheckbox"
+                                                #optionModel="ngModel">
+                                        </div>
+                                        <div class="me-2" *ngIf="status!='Add'&&status!='Edit'">
+                                            <input *ngIf="status=='Submit'" type="radio" name="radiocheck"
+                                                [value]="option.id" [(ngModel)]="option.isCorrect"
+                                                (change)="setOptionId(option.id!)">
+                                            <input *ngIf="status=='View'|| status=='Examine'" type="radio"
+                                                name="radiocheck" [value]="option.id" [(ngModel)]="option.selectedId"
+                                                (change)="setOptionId(option.id!)" disabled>
+                                        </div>
+                                        <div class="me-2"
+                                            *ngIf="data.questions![currentEditableIndex].options!.length>1 &&(status =='Add'||status=='Edit')">
+                                            <i class="fa-solid fa-trash text-danger pointer"
+                                                (click)="removeOption(idx)"></i>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 ms-3" *ngIf="status=='Add'||status=='Edit'">
+                                    <span class="pointer" style="color: blue;text-decoration: underline;"
+                                        (click)="addOption()">Add Option</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-3 d-flex justify-content-between">
+                    <div class="next-previous-circle" (click)="previousQuestion()">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </div>
+                    <div class="next-previous-circle" (click)="addQuestion()">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="card mb-0" style="max-height: 90vh;overflow: auto; ">
+    <div class="d-flex justify-content-between align-items-center p-3">
+        <span class="title">{{status}} Class</span>
+        <i class="fa-regular fa-x pointer" (click)="close()"></i>
+    </div>
+    <hr class="m-0">
+    <form #associationForm="ngForm" (ngSubmit)="onSubmit()">
+        <div class="p-3">
+            <div class="form-field">
+                <label class="label">Name*</label>
+                <input type="text" class="form-control" [(ngModel)]="data.name" name="name" #name="ngModel">
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Code</label>
+                <input type="text" class="form-control" [(ngModel)]="data.code" name="code" #code="ngModel">
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Class Teacher</label>
+                <select class="form-select" [(ngModel)]="data.teacherDetailId" name="teacherDetailId"
+                    #teacherDetailId="ngModel">
+                    <option *ngFor="let teacher of teachers" [value]="teacher.id">{{teacher.name}}</option>
+                </select>
+            </div>
+            <!-- <div class="form-field mt-4">
+                <label class="label">Course</label>
+                <select class="form-select" [(ngModel)]="data.courseId" name="course" #course="ngModel">
+                    <option *ngFor="let course of courses" [value]="course.id">{{course.name}}</option>
+                </select>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Department</label>
+                <select class="form-select" [(ngModel)]="data.departmentId" name="department" #department="ngModel">
+                    <option *ngFor="let department of departments" [value]="department.id">{{department.name}}</option>
+                </select>
+            </div>
+            <div class="form-field mt-4">
+                <label class="label">Students</label>
+                <mat-select class="form-select" name="item" [(ngModel)]="data.userIds" multiple>
+                    <div class="drop-down">
+                        <mat-option *ngFor="let student of students"
+                            [value]="student.userId">{{student.name}}</mat-option>
+                    </div>
+                </mat-select>
+            </div> -->
+        </div>
+        <hr class="m-0">
+        <div class="d-flex justify-content-end p-3">
+            <button type="button" class="btn btn-secondary mx-2" (click)="close()">Cancel</button>
+            <button type="submit" class="btn btn-primary">{{data.id?'Update':'Save'}}</button>
+        </div>
+    </form>
+</div>

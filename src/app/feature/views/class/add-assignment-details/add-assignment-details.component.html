@@ -1,0 +1,71 @@
+<form #assignmentForm="ngForm" (ngSubmit)="onSubmit()">
+    <div class="p-3">
+        <div class="row">
+            <div class="col-6">
+                <div class="form-field">
+                    <label class="label">Title</label>
+                    <input type="text" class="form-control" name="title" [(ngModel)]="assignment.title" #title="ngModel"
+                        required [ngClass]="{'is-invalid':title.touched && title.errors && title.errors['required']}">
+                    <p *ngIf="title.touched && title.errors && title.errors['required']" class="validation-error ">
+                        Title is required
+                    </p>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-field">
+                    <label class="label">Start Date</label>
+                    <input type="date" class="form-control" name="startDate" [(ngModel)]="assignment.startDate"
+                        #startDate="ngModel">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-field mt-4">
+                    <label class="label">End date</label>
+                    <input type="date" class="form-control" name="endDate" [(ngModel)]="assignment.endDate"
+                        #endDate="ngModel">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-field mt-4">
+                    <label class="label">Time</label>
+                    <input type="time" class="form-control" name="time" [(ngModel)]="assignment.time" #time="ngModel">
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-field mt-4">
+                    <label class="label">Class</label>
+                    <select name="association" class="form-select" [(ngModel)]="assignment.associationId"
+                        (change)="filterSubjects()" #association="ngModel">
+                        <option *ngFor="let class of classes" [value]="class.id">{{class.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6" *ngIf="assignment.associationId && filteredSubjects.length>0">
+                <div class="form-field mt-4">
+                    <label class="label">Subject</label>
+                    <select name="subject" class="form-select" [(ngModel)]="assignment.subjectId"
+                        (change)="filterChapters()" #subject="ngModel">
+                        <option *ngFor="let subject of filteredSubjects" [value]="subject.id">{{subject.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6" *ngIf="assignment.subjectId && filteredChapters.length>0">
+                <div class="form-field mt-4">
+                    <label class="label">Chapter</label>
+                    <select name="chapter" class="form-select" [(ngModel)]="assignment.chapterId" #chapter="ngModel">
+                        <option *ngFor="let chapter of filteredChapters" [value]="chapter.id">{{chapter.name}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="form-field mt-4">
+                    <label class="label">Description</label>
+                    <textarea type="time" class="form-control" name="description" [(ngModel)]="assignment.description"
+                        #descriptions="ngModel"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

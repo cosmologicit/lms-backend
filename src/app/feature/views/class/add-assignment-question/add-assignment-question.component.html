@@ -1,0 +1,65 @@
+<div class="card p-3" [ngClass]="{'selected-border' : question.isFocused?'selected-border':''}"
+    (click)="focusQuestion()">
+    <div class="row">
+        <div class="col-8">
+            <div class="input-effect">
+                <input class="border-effect" type="text" placeholder="Question" [(ngModel)]="question.question">
+                <span class="focus-border"></span>
+            </div>
+        </div>
+        <div class="col-4 d-flex justify-content-between align-items-center">
+            <div class="input-effect">
+                <select class="border-effect" [(ngModel)]="question.type">
+                    <option value="{{constants.OBJECTIVE}}">&#xf192;&nbsp;Multiple Choice</option>
+                    <option value="{{constants.LONG_ANSWER}}">&#xf036;&nbsp;Long Answer</option>
+                </select>
+                <span class="focus-border"></span>
+            </div>
+            <mat-icon style="color: crimson;" class="pointer" (click)="deleteQuestion()">delete</mat-icon>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mt-3" *ngIf="question?.type==constants.OBJECTIVE">
+            <div class="d-flex align-items-center" style="margin-bottom: 5px;"
+                *ngFor="let option of question.options;let optionIdx=index">
+                <mat-icon *ngIf="!option?.isCorrect" class="radio-icon me-2 mt-1 pointer" style="color: #1b3e99;"
+                    (click)="option.isCorrect=true">check_box_outline_blank</mat-icon>
+                <mat-icon *ngIf="option?.isCorrect" class="radio-icon me-2 mt-1 pointer" style="color: #1b3e99;"
+                    (click)="option.isCorrect=false">check_box</mat-icon>
+
+                <div class="input-effect" style="flex-grow: 1;">
+                    <input class="border-effect" type="text" placeholder="{{option.text}}" [(ngModel)]="option.text">
+                    <span class="focus-border"></span>
+                </div>
+                <mat-icon class="close-icon ms-2 mt-1 pointer" (click)="deleteOption(optionIdx)">close</mat-icon>
+            </div>
+        </div>
+        <div class="col-12 mt-3" *ngIf="question?.type==constants.OBJECTIVE">
+            <div class="d-flex align-items-center">
+                <mat-icon class="radio-icon me-2 mt-1 pointer">add</mat-icon>
+                <div class="add-option" (click)="addOption()">Add Option</div>
+            </div>
+        </div>
+        <div class="col-10 mt-3" *ngIf="question?.type=='LONG_ANSWER'">
+            <span class="ans-border">Long Answer Text</span>
+        </div>
+    </div>
+
+    <div class="row mt-2">
+        <div class="col-4 d-flex align-items-center">
+            <span class="me-2" style="color: green;">Positive Marks</span>
+            <div class="input-effect">
+                <input class="border-effect" type="number" [(ngModel)]="question.positiveMark">
+                <span class="focus-border"></span>
+            </div>
+        </div>
+        <div class="col-4 d-flex align-items-center">
+            <span class="me-2" style="color: crimson;">Negative Marks</span>
+            <div class="input-effect">
+                <input class="border-effect" type="number" [(ngModel)]="question.negativeMark">
+                <span class="focus-border"></span>
+            </div>
+        </div>
+    </div>
+</div>
